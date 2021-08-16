@@ -1,8 +1,14 @@
-import { instance } from "./index";
+import axios from "axios";
 
 export const getCategories = () => {
-  return instance({
+  return axios({
     method: "GET",
     url: "/admin/api/categories",
+    params: {
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
+    },
   });
 };

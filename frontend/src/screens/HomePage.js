@@ -9,8 +9,8 @@ const HomePage = () => {
   const productList = useSelector((state) => {
     return state.productListReducer;
   });
-  const { products } = productList;
-
+  const { loading, products } = productList;
+  console.log(loading);
   useEffect(() => {
     dispatch(listProducts());
   }, [dispatch]);

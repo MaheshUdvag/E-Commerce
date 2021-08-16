@@ -4,6 +4,7 @@ import React from "react";
 import Rating from "@material-ui/lab/Rating";
 import { makeStyles } from "@material-ui/core/styles";
 import { Image } from "cloudinary-react";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -33,12 +34,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Product = (props) => {
+  const history = useHistory();
   const classes = useStyles();
   const description = props.product.description.filter((desc) => {
     return desc.language.languageId === -1;
   });
   return (
-    <Card variant="outlined" className={classes.card}>
+    <Card
+      variant="outlined"
+      className={classes.card}
+      onClick={() => history.push(`/product/${props.product.path}`)}
+    >
       <Image
         src={description[0].thumbnailImage}
         cloudName="dvvxjkifm"

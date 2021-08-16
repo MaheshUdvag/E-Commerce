@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import CatalogDescSchema from "./associations/catalogDesc.js";
+import CatalogDescSchema from "./associations/CatalogDesc.js";
 
 const Schema = mongoose.Schema;
 

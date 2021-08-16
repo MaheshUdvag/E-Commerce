@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { listCategories } from "../../actions/categoryActions";
+import { listCategories } from "../actions/categoryActions";
+import { logoutUser } from "../actions/userActions";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -16,6 +17,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "@material-ui/core/styles";
 import CartIcon from "@material-ui/icons/ShoppingCart";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,13 +51,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   category: {
-    padding: 10,
+    padding: 5,
+    margin: 5,
+    display: "inline",
   },
   menu: {
     marginTop: 50,
   },
   link: {
     color: "#ffffff",
+  },
+  menuitem: {
+    width: 160,
   },
 }));
 
@@ -65,6 +72,7 @@ const Header = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorCategoryMenu, setAnchorCategoryMenu] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -72,13 +80,24 @@ const Header = () => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleCategoryMenu = (event) => {
-    setAnchorCategoryMenu(event.currentTarget);
+  const logOut = () => {
+    dispatch(logoutUser());
+    handleClose();
+  };
+
+  const profile = () => {
+    handleClose();
+    history.push("/profile");
   };
 
   const categoryList = useSelector((state) => {
     return state.categoryListReducer;
   });
+  const userInfo = useSelector((state) => {
+    return state.userLogin;
+  });
+  const { user } = userInfo;
+
   const { categories } = categoryList;
 
   useEffect(() => {
@@ -128,18 +147,51 @@ const Header = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={profile}>Profile</MenuItem>
+                  <MenuItem onClick={logOut}>Logout</MenuItem>
                 </Menu>
               </div>
             ) : (
               <div>
-                <Button startIcon={<CartIcon />} color="secondary">
+                <Button
+                  startIcon={<CartIcon />}
+                  color="secondary"
+                  onClick={() => (user ? history.push("/cart") : null)}
+                >
                   CART
                 </Button>
-                <Button startIcon={<AccountCircleIcon />} color="secondary">
-                  SIGN IN
+
+                <Button
+                  startIcon={<AccountCircleIcon />}
+                  onClick={(event) =>
+                    user ? handleMenu(event) : history.push("/login")
+                  }
+                  color="secondary"
+                >
+                  {user ? user.name.toUpperCase() : "SIGN IN"}
                 </Button>
+
+                {user ? (
+                  <Menu
+                    id="menu-appbar"
+                    className={classes.menu}
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={profile}>Profile</MenuItem>
+                    <MenuItem onClick={logOut}>Logout</MenuItem>
+                  </Menu>
+                ) : null}
               </div>
             )}
           </Toolbar>
@@ -147,14 +199,21 @@ const Header = () => {
             <div className={classes.topCategories}>
               {categories
                 ? categories.map((category) => (
-                    <div key={category._id}>
-                      <Button
-                        className={classes.category}
-                        color="primary"
-                        onClick={handleCategoryMenu}
-                      >
-                        {category.name.toUpperCase()}
-                      </Button>
+                    <React.Fragment key={category._id}>
+                      <div style={{ display: "inline-block" }}>
+                        <Button
+                          className={classes.category}
+                          color="primary"
+                          onClick={(event) => {
+                            setAnchorCategoryMenu(null);
+                            setSelectedCategory(null);
+                            setAnchorCategoryMenu(event.currentTarget);
+                            setSelectedCategory(category._id);
+                          }}
+                        >
+                          {category.name.toUpperCase()}
+                        </Button>
+                      </div>
                       {category.subCategories ? (
                         <Menu
                           className={classes.menu}
@@ -169,22 +228,21 @@ const Header = () => {
                             vertical: "top",
                             horizontal: "right",
                           }}
-                          open={Boolean(anchorCategoryMenu)}
-                          onClose={() => setAnchorCategoryMenu(null)}
+                          open={Boolean(selectedCategory === category._id)}
+                          onClose={() => {
+                            setAnchorCategoryMenu(null);
+                            setSelectedCategory(null);
+                          }}
                         >
                           {category.subCategories.map((subCategory) => (
                             <MenuItem
                               key={subCategory._id}
+                              className={classes.menuitem}
                               onClick={() => {
                                 setAnchorCategoryMenu(null);
-
-                                const categoryName = subCategory.name.replace(
-                                  /\s/g,
-                                  ""
-                                );
+                                setSelectedCategory(null);
                                 history.push({
-                                  pathname: `/category/${categoryName}`,
-                                  state: { category: subCategory },
+                                  pathname: `/category/${subCategory.path}`,
                                 });
                               }}
                             >
@@ -193,7 +251,7 @@ const Header = () => {
                           ))}
                         </Menu>
                       ) : null}
-                    </div>
+                    </React.Fragment>
                   ))
                 : null}
             </div>

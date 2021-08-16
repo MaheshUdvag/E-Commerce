@@ -32,16 +32,19 @@ const Carousel = () => {
           <img
             alt=""
             src="https://static01.nyt.com/images/2020/07/17/business/00virus-cities1/00virus-cities1-mediumSquareAt3X.jpg"
+            style={{ maxHeight: "40vh" }}
           ></img>
         </SwiperSlide>
         <SwiperSlide>
           <img
+            style={{ maxHeight: "40vh" }}
             alt=""
             src="https://static01.nyt.com/images/2020/07/17/business/00virus-cities1/00virus-cities1-mediumSquareAt3X.jpg"
           ></img>
         </SwiperSlide>
         <SwiperSlide>
           <img
+            style={{ maxHeight: "40vh" }}
             alt=""
             src="https://static01.nyt.com/images/2020/07/17/business/00virus-cities1/00virus-cities1-mediumSquareAt3X.jpg"
           ></img>

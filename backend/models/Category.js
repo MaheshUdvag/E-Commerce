@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import categoryDescSchema from "./associations/categoryDesc.js";
+import categoryDescSchema from "./associations/CategoryDesc.js";
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +17,11 @@ const categorySchema = new Schema({
       ref: "product",
     },
   ],
+  path: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   isParentCategory: Boolean,
   subCategories: [
     {

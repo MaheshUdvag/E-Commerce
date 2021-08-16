@@ -4,7 +4,9 @@ import mongoose from "mongoose";
 import ProductRoutes from "./routes/administratorRoutes/products.js";
 import CategoryRoutes from "./routes/administratorRoutes/categories.js";
 import CatalogRoutes from "./routes/administratorRoutes/catalog.js";
-import Product from "./models/product.js";
+import UserRoutes from "./routes/storeRoutes/user.js";
+import OrderRoutes from "./routes/storeRoutes/order.js";
+import { requestNotFound, invalidRequest } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -26,6 +28,10 @@ mongoose.connection
 app.use("/admin/api/products", ProductRoutes);
 app.use("/admin/api/categories", CategoryRoutes);
 app.use("/admin/api/catalog", CatalogRoutes);
+app.use("/api/users", UserRoutes);
+app.use("/api/orders", OrderRoutes);
+app.use(requestNotFound);
+app.use(invalidRequest);
 
 const PORT = process.env.PORT || 5000;
 

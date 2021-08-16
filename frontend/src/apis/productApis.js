@@ -1,22 +1,43 @@
-import { instance } from "./index";
+import axios from "axios";
 
 export const getProducts = (count) => {
-  return instance({
+  return axios({
     method: "GET",
     url: "/admin/api/products",
     params: {
       count,
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
     },
   });
 };
 
-export const getProductsByCategory = (id, count) => {
-  return instance({
+export const getProductsByCategory = (path, count) => {
+  return axios({
     method: "GET",
     url: "/admin/api/products/byCategory",
     params: {
-      id,
+      path,
       count,
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};
+
+export const getProductDetail = (path) => {
+  return axios({
+    method: "GET",
+    url: `/admin/api/products//detail/${path}`,
+    params: {
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
     },
   });
 };
