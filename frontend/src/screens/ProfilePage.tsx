@@ -12,6 +12,7 @@ import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import Account from "../components/Account";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import PasswordReset from "../components/PasswordReset";
+import useUserLogin from "../hooks/useUserLogin";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -43,23 +44,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfilePage = (props:any) => {
+const ProfilePage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
   const [content, setContent] = useState<any>(null);
   const [selected, setSelected] = useState("Account");
-
-  const userInfo = useSelector((state:any) => {
-    return state.userLogin;
-  });
-
-  const userProfileInfo = useSelector((state:any) => {
+  const userProfileInfo = useSelector((state: any) => {
     return state.userProfile;
   });
-
-  const { user } = userInfo;
   const profile = userProfileInfo.user;
+
+  const { user } = useUserLogin();
 
   const renderAccount = () => {
     if (profile) {

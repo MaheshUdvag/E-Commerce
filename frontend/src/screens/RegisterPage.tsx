@@ -7,6 +7,7 @@ import { Field, reduxForm } from "redux-form";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { registerUser } from "../actions/userActions";
+import useUserLogin from "../hooks/useUserLogin";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -34,7 +35,7 @@ const renderInput = ({
   label,
   type,
   autoComplete = "off",
-}:any) => {
+}: any) => {
   return (
     <TextField
       error={meta.touched && meta.error !== undefined}
@@ -50,21 +51,26 @@ const renderInput = ({
   );
 };
 
-const RegisterPage = (props:any) => {
+const RegisterPage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onSubmit = ({ email, password, name }:{email:string,password:string,name:string}) => {
+  const onSubmit = ({
+    email,
+    password,
+    name,
+  }: {
+    email: string;
+    password: string;
+    name: string;
+  }) => {
     dispatch(registerUser(email, password, name));
   };
 
-  const userInfo = useSelector((state:any) => {
-    return state.userLogin;
-  });
-  const { user } = userInfo;
+  const { user } = useUserLogin();
 
-  const userRegisterInfo = useSelector((state:any) => {
+  const userRegisterInfo = useSelector((state: any) => {
     return state.userRegister;
   });
   const { error } = userRegisterInfo;
@@ -150,8 +156,13 @@ const RegisterPage = (props:any) => {
   );
 };
 
-const validate = (values:any) => {
-  const errors:{email: string,password:string,confirmPassword:string,[key: string]: string} = { email: "",password:"",confirmPassword:"" };
+const validate = (values: any) => {
+  const errors: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    [key: string]: string;
+  } = { email: "", password: "", confirmPassword: "" };
   const { email, password, confirmPassword } = values;
   const requiredFields = ["email", "password", "name", "confirmPassword"];
   requiredFields.forEach((field) => {

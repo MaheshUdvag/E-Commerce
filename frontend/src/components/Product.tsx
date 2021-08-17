@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Product = ({product}:  {product: IProduct}) => {
+const Product = ({ product }: { product: IProduct }) => {
   const history = useHistory();
   const classes = useStyles();
   const description = product.description.filter((desc) => {
@@ -79,7 +79,7 @@ const Product = ({product}:  {product: IProduct}) => {
             $ {product.price.offerPrice.toFixed(2)}
           </span>
         </Typography>
-        <Button variant="outlined" className={classes.button}>
+        <Button variant="outlined" size="small" className={classes.button}>
           Click to view product
         </Button>
       </CardContent>

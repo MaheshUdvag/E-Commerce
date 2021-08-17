@@ -1,12 +1,13 @@
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { loginUser } from "../actions/userActions";
 import FormContainer from "../components/FormContainer";
 import { Field, reduxForm } from "redux-form";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
+import useUserLogin from "../hooks/useUserLogin";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -50,22 +51,25 @@ const renderInput = ({
   );
 };
 
-const LoginPage = (props:any) => {
+const LoginPage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const onSubmit = ({ email, password }:{email:string,password:string}) => {
+  const onSubmit = ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     dispatch(loginUser(email, password));
   };
 
-  const userInfo = useSelector((state:any) => {
-    return state.userLogin;
-  });
-  const { user, error } = userInfo;
+  const { user, error } = useUserLogin();
 
   useEffect(() => {
-    if (user) {
+    if (user && Object.keys(user).length > 0) {
       history.push("/");
     }
   }, [user, history]);
@@ -128,8 +132,11 @@ const LoginPage = (props:any) => {
   );
 };
 
-const validate = (values:any) => {
-  const errors:{email: string,password:string,[key: string]: string} = { email: "",password:"" };
+const validate = (values: any) => {
+  const errors: { email: string; password: string; [key: string]: string } = {
+    email: "",
+    password: "",
+  };
   const requiredFields = ["email", "password"];
   requiredFields.forEach((field) => {
     if (!values[field]) {

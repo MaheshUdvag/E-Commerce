@@ -4,10 +4,11 @@ import BookmarkIcon from "@material-ui/icons/Bookmark";
 import CartIcon from "@material-ui/icons/ShoppingCart";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createOrderAction, updateCart } from "../actions/orderActions";
 import { IProduct } from "./Interface/IProduct";
 import { IOrderItems } from "./Interface/IOrder";
+import useActiveOrder from "../hooks/useActiveOrder";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -21,10 +22,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const activeOrder = useSelector((state: any) => {
-    return state.activeOrder;
-  });
-  const { order } = activeOrder;
+  const { order } = useActiveOrder();
 
   const [inCart, setInCart] = useState(false);
 

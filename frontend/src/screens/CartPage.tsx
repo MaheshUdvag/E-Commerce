@@ -1,32 +1,31 @@
 import { Container, Grid } from "@material-ui/core";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getActiveOrder } from "../actions/orderActions";
 import CartItems from "../components/CartItems";
 import Error from "../components/Error";
 import OrderSummary from "../components/OrderSummary";
+import useActiveOrder from "../hooks/useActiveOrder";
+import useUserLogin from "../hooks/useUserLogin";
 
 const CartPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const userInfo = useSelector((state:any) => {
-    return state.userLogin;
-  });
-  const { user } = userInfo;
-
-  const activeOrder = useSelector((state:any) => {
-    return state.activeOrder;
-  });
-  const { order, error } = activeOrder;
+  const { user } = useUserLogin();
+  const { order, error } = useActiveOrder();
 
   useEffect(() => {
-    if (!user) {
-      history.push("/");
-    }
+    console.log(typeof user);
 
-    dispatch(getActiveOrder());
+    if ((user && Object.keys(user).length === 0) || user === undefined) {
+      history.push("/");
+    } else {
+      console.log("elses");
+
+      dispatch(getActiveOrder());
+    }
   }, [user, history, dispatch]);
 
   return (

@@ -20,6 +20,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import { useHistory } from "react-router-dom";
 import { ICategory } from "./Interface/ICategory";
+import useUserLogin from "../hooks/useUserLogin";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,7 +77,6 @@ const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-  const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
   const handleMenu = (event: any) => {
     setAnchorEl(event.currentTarget);
@@ -95,24 +95,14 @@ const Header = () => {
   const categoryList = useSelector((state: any) => {
     return state.categoryListReducer;
   });
-  const userInfo = useSelector((state: any) => {
-    return state.userLogin;
-  });
-  const { user } = userInfo;
+
+  const { user } = useUserLogin();
 
   const { categories } = categoryList;
 
   useEffect(() => {
     dispatch(listCategories());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (user && Object.keys(user).length > 0) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [user]);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -166,7 +156,11 @@ const Header = () => {
                 <Button
                   startIcon={<CartIcon />}
                   color="secondary"
-                  onClick={() => (isLoggedIn ? history.push("/cart") : null)}
+                  onClick={() =>
+                    user && Object.keys(user).length > 0
+                      ? history.push("/cart")
+                      : null
+                  }
                 >
                   CART
                 </Button>
@@ -174,11 +168,15 @@ const Header = () => {
                 <Button
                   startIcon={<AccountCircleIcon />}
                   onClick={(event) =>
-                    isLoggedIn ? handleMenu(event) : history.push("/login")
+                    user && Object.keys(user).length > 0
+                      ? handleMenu(event)
+                      : history.push("/login")
                   }
                   color="secondary"
                 >
-                  {isLoggedIn ? user.name.toUpperCase() : "SIGN IN"}
+                  {user && Object.keys(user).length > 0
+                    ? user.name.toUpperCase()
+                    : "SIGN IN"}
                 </Button>
 
                 {user ? (
