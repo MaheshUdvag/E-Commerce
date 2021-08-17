@@ -12,6 +12,7 @@ import RegisterPage from "./screens/RegisterPage";
 import ProfilePage from "./screens/ProfilePage";
 import CartPage from "./screens/CartPage";
 import { makeStyles } from "@material-ui/core/styles";
+import useInitUserInformation from "./hooks/useInitUserInformation";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const classes = useStyles();
+  useInitUserInformation();
 
   return (
     <Router>
