@@ -1,17 +1,25 @@
 import { Route } from "react-router-dom";
 import { Redirect } from "react-router";
+import { IRoute } from "./Routes";
 
-const RouteUtils: React.FC<any> = (route: any) => {
+interface IRouteUtils {
+  route: IRoute;
+  authenticated: boolean;
+}
+
+const RouteUtils: React.FC<IRouteUtils> = ({ route, authenticated }) => {
   return (
     <Route
       path={route.path}
       render={(props) =>
-        route.protected ? (
-          route.authenticated ? (
+        route.type === "authenticated" ? (
+          authenticated ? (
             <route.component {...props} routes={route.routes} />
           ) : (
             <Redirect to="/login" />
           )
+        ) : route.type === "unAuthenticated" && authenticated ? (
+          <Redirect to="/" />
         ) : (
           <route.component {...props} routes={route.routes} />
         )

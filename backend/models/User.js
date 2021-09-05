@@ -13,15 +13,14 @@ const UserSchema = new Schema(
     },
     name: {
       type: String,
-      required: true,
     },
     password: {
       type: String,
-      required: true,
     },
     store: { type: Schema.Types.ObjectId, ref: "store" },
     email: String,
     address: [AddressSchema],
+    userType: String,
   },
   {
     timestamps: true,

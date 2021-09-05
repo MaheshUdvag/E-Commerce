@@ -12,17 +12,11 @@ import useUserLogin from "../hooks/useUserLogin";
 const CartPage = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const { user } = useUserLogin();
   const { order, error } = useActiveOrder();
 
   useEffect(() => {
-    if ((user && Object.keys(user).length === 0) || user === undefined) {
-      history.push("/");
-    } else {
-      dispatch(getActiveOrder());
-    }
-  }, [user, history, dispatch]);
+    dispatch(getActiveOrder());
+  }, [dispatch]);
 
   return (
     <Container>

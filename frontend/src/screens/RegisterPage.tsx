@@ -54,7 +54,6 @@ const renderInput = ({
 const RegisterPage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const onSubmit = ({
     email,
@@ -68,18 +67,10 @@ const RegisterPage = (props: any) => {
     dispatch(registerUser(email, password, name));
   };
 
-  const { user } = useUserLogin();
-
   const userRegisterInfo = useSelector((state: any) => {
     return state.userRegister;
   });
   const { error } = userRegisterInfo;
-
-  useEffect(() => {
-    if (user) {
-      history.push("/");
-    }
-  }, [user, history]);
 
   return (
     <>

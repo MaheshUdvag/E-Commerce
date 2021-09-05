@@ -31,6 +31,19 @@ export const userRegister = (email: string, password: string, name: string) => {
   });
 };
 
+export const guestRegister = () => {
+  return axios({
+    method: "POST",
+    url: "/api/users/guest",
+    data: {
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};
+
 export const userProfile = (token: string) => {
   return axios({
     method: "GET",

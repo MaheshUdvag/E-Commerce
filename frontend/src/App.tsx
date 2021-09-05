@@ -26,8 +26,12 @@ const App = () => {
       <ThemeProvider theme={themes}>
         <Header />
         <div className={classes.app}>
-          {routes.map((route) => (
-            <RouteUtils {...route} authenticated={authenticated} />
+          {routes.map((route, index) => (
+            <RouteUtils
+              key={index}
+              route={route}
+              authenticated={authenticated}
+            />
           ))}
         </div>
         <Footer />

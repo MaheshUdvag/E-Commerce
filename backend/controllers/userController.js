@@ -16,6 +16,7 @@ export const login = asyncHandler(async (req, res) => {
       token,
       name: user.name,
       email: user.email,
+      authenticated: true,
     });
   } else {
     res.status(400);
@@ -59,6 +60,7 @@ export const register = asyncHandler(async (req, res) => {
       token,
       name: user.name,
       email: user.email,
+      authenticated: true,
     });
   } else {
     res.status(400);
@@ -288,5 +290,34 @@ export const setDefaultAddress = asyncHandler(async (req, res) => {
   } else {
     res.status(400);
     throw new Error(`User not found`);
+  }
+});
+
+export const guest = asyncHandler(async (req, res) => {
+  const { storeName } = req.body;
+
+  const store = await StoreSchema.findOne({ storeName });
+  const loginId = "Guest" + new Date();
+
+  const fields = {
+    loginId,
+    userType: "G",
+    store,
+  };
+
+  const user = await UserSchema.create(fields);
+
+  if (user) {
+    const token = generateToken(user._id);
+    res.status(201).send({
+      _id: user._id,
+      token,
+      name: user.name,
+      email: user.email,
+      authenticated: false,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
   }
 });

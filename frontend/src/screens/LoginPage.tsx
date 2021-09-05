@@ -66,10 +66,10 @@ const LoginPage = (props: any) => {
     dispatch(loginUser(email, password));
   };
 
-  const { user, error } = useUserLogin();
+  const { user, error, authenticated } = useUserLogin();
 
   useEffect(() => {
-    if (user && Object.keys(user).length > 0) {
+    if (authenticated) {
       history.push("/");
     }
   }, [user, history]);

@@ -10,7 +10,15 @@ import PasswordReset from "../components/PasswordReset";
 import AddressBook from "../components/AddressBook";
 import CheckoutPage from "../screens/CheckoutPage";
 
-const routes = [
+export interface IRoute {
+  path: string;
+  component: any;
+  exact: boolean;
+  type?: string;
+  routes?: IRoute[];
+}
+
+const routes: IRoute[] = [
   {
     path: "/",
     component: HomePage,
@@ -30,6 +38,7 @@ const routes = [
     path: "/register",
     component: RegisterPage,
     exact: true,
+    type: "unAuthenticated",
   },
   {
     path: "/product/:name",
@@ -43,14 +52,18 @@ const routes = [
       {
         path: "/profile/change-password",
         component: PasswordReset,
+        exact: false,
+        type: "authenticated",
       },
       {
         path: "/profile/address",
         component: AddressBook,
+        exact: false,
+        type: "authenticated",
       },
     ],
     exact: false,
-    protected: true,
+    type: "authenticated",
   },
   {
     path: "/add-address",
@@ -66,13 +79,11 @@ const routes = [
     path: "/cart",
     component: CartPage,
     exact: true,
-    protected: true,
   },
   {
     path: "/checkout",
     component: CheckoutPage,
     exact: false,
-    protected: true,
   },
 ];
 

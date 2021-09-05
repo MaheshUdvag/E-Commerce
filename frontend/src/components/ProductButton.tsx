@@ -9,6 +9,7 @@ import { createOrderAction, updateCart } from "../actions/orderActions";
 import { IProduct } from "./Interface/IProduct";
 import { IOrderItems } from "./Interface/IOrder";
 import useActiveOrder from "../hooks/useActiveOrder";
+import { guestUser } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -26,11 +27,12 @@ const ProductButton = ({ product }: { product: IProduct }) => {
 
   const [inCart, setInCart] = useState(false);
 
-  const addToCart = () => {
+  const addToCart = async () => {
     if (order && Object.keys(order).length > 0) {
-      dispatch(updateCart(order._id, product._id, 1));
+      await dispatch(updateCart(order._id, product._id, 1));
     } else {
-      dispatch(createOrderAction(product._id, 1));
+      await dispatch(guestUser());
+      await dispatch(createOrderAction(product._id, 1));
     }
   };
 

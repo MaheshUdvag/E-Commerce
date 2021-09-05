@@ -6,6 +6,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { removeItemFromCart, updateCart } from "../actions/orderActions";
 import { useDispatch } from "react-redux";
 import { IOrder } from "./Interface/IOrder";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   cartItems: {
@@ -46,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
       alignItems: "center",
     },
     display: "block",
+    "&:hover": {
+      "text-decoration": "underline",
+    },
+    cursor: "pointer",
   },
 }));
 const CartItems = ({ order }: { order: IOrder }) => {
@@ -73,7 +78,6 @@ const CartItems = ({ order }: { order: IOrder }) => {
         );
         setErrors(displayError);
       } else if (quantity <= 0) {
-        event.target.value = "1";
         const displayError = errors.filter(
           (error) => error !== event.target.id
         );
@@ -86,6 +90,8 @@ const CartItems = ({ order }: { order: IOrder }) => {
       // setErrors([...errors, event.target.id]);
     }
   };
+
+  const history = useHistory();
 
   return (
     <div className={classes.cartItems}>
@@ -125,14 +131,23 @@ const CartItems = ({ order }: { order: IOrder }) => {
               className={classes.cartItem}
             >
               <Grid item lg={3} md={3} sm={4} xs={3}>
-                <div className={classes.product}>
+                <div
+                  className={classes.product}
+                  onClick={() =>
+                    history.push(`product/${orderItem.product.path}`)
+                  }
+                >
                   <Image
                     cloudName="dvvxjkifm"
                     style={{ height: 50, paddingRight: 10 }}
                     crop="scale"
                     src={orderItem.product.description[0].thumbnailImage}
                   ></Image>
-                  <Typography variant="body2" component="p">
+                  <Typography
+                    variant="body2"
+                    component="p"
+                    className={classes.product}
+                  >
                     {orderItem.product.name.substring(0, 40)}...
                   </Typography>
                 </div>

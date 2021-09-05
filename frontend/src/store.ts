@@ -50,6 +50,7 @@ type UserInfo = {
   token: string;
   name: string;
   email: string;
+  authenticated: boolean;
 };
 
 const userInfo: UserInfo = JSON.parse(
@@ -57,7 +58,10 @@ const userInfo: UserInfo = JSON.parse(
 );
 
 const initialState = {
-  userLogin: { user: userInfo },
+  userLogin: {
+    user: userInfo,
+    authenticated: userInfo.authenticated,
+  },
 };
 
 const middleware = [thunk];

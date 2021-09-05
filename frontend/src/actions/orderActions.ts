@@ -30,13 +30,14 @@ export const getActiveOrder = () => async (dispatch: any, getState: any) => {
 
     const { data } = await activeOrder(token);
     dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
-  } catch (err) {
+  } catch (err: any) {
     dispatch({ type: ACTIVE_ORDER_FAIL, payload: err.response });
   }
 };
 
 export const updateCart =
-  (orderId: string, productId: string, quantity: number) => async (dispatch: any, getState: any) => {
+  (orderId: string, productId: string, quantity: number) =>
+  async (dispatch: any, getState: any) => {
     try {
       dispatch({ type: ADD_UPDATE_CART_REQUEST });
 
@@ -48,13 +49,14 @@ export const updateCart =
       const { data } = await addUpdateItem(orderId, productId, quantity, token);
       dispatch({ type: ADD_UPDATE_CART_SUCCESS, payload: data });
       dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
-    } catch (err) {
+    } catch (err: any) {
       dispatch({ type: ADD_UPDATE_CART_FAIL, payload: err.response });
     }
   };
 
 export const removeItemFromCart =
-  (orderId: string, productId: string) => async (dispatch: any, getState: any) => {
+  (orderId: string, productId: string) =>
+  async (dispatch: any, getState: any) => {
     try {
       dispatch({ type: REMOVE_ITEM_REQUEST });
 
@@ -71,13 +73,14 @@ export const removeItemFromCart =
       } else {
         dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: {} });
       }
-    } catch (err) {
+    } catch (err: any) {
       dispatch({ type: REMOVE_ITEM_FAIL, payload: err.response });
     }
   };
 
 export const createOrderAction =
-  (productId: string, quantity: number) => async (dispatch: any, getState: any) => {
+  (productId: string, quantity: number) =>
+  async (dispatch: any, getState: any) => {
     try {
       dispatch({ type: CREATE_ORDER_REQUEST });
 
@@ -89,7 +92,7 @@ export const createOrderAction =
       const { data } = await createOrder(productId, quantity, token);
       dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
       dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
-    } catch (err) {
+    } catch (err: any) {
       dispatch({ type: CREATE_ORDER_FAIL, payload: err.response });
     }
   };

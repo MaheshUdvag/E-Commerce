@@ -96,7 +96,7 @@ const Header = () => {
     return state.categoryListReducer;
   });
 
-  const { user } = useUserLogin();
+  const { user, authenticated } = useUserLogin();
 
   const { categories } = categoryList;
 
@@ -164,15 +164,11 @@ const Header = () => {
                 <Button
                   startIcon={<AccountCircleIcon />}
                   onClick={(event) =>
-                    user && Object.keys(user).length > 0
-                      ? handleMenu(event)
-                      : history.push("/login")
+                    authenticated ? handleMenu(event) : history.push("/login")
                   }
                   color="secondary"
                 >
-                  {user && Object.keys(user).length > 0
-                    ? user.name.toUpperCase()
-                    : "SIGN IN"}
+                  {authenticated ? user.name.toUpperCase() : "SIGN IN"}
                 </Button>
 
                 {user ? (

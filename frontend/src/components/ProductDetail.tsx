@@ -69,10 +69,10 @@ const ProductDetail = (props: any) => {
       {product.attributes.length > 0 ? (
         <div className={classes.content}>
           <Typography variant="h6" className={classes.title}>
-            Key Specs
+            Specifications
           </Typography>
 
-          {product.attributes.map((attribute:IAttributes) => (
+          {product.attributes.map((attribute: IAttributes) => (
             <Grid
               key={attribute._id}
               container

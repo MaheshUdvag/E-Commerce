@@ -34,7 +34,7 @@ const OrderSummary = ({ order }: { order: IOrder }) => {
       <br />
       <Grid container className={classes.grid}>
         <Grid item lg={7} md={7} sm={7} xs={7}>
-          <Typography>SubTotal</Typography>
+          <Typography>Sub Total</Typography>
         </Grid>
         <Grid item lg={5} md={5} sm={5} xs={5}>
           <Typography>$ {order.total.toFixed(2)}</Typography>
@@ -42,7 +42,7 @@ const OrderSummary = ({ order }: { order: IOrder }) => {
       </Grid>
       <Grid container className={classes.grid}>
         <Grid item lg={7} md={7} sm={7} xs={7}>
-          <Typography>SalesTax</Typography>
+          <Typography>Sales Tax</Typography>
         </Grid>
         <Grid item lg={5} md={5} sm={5} xs={5}>
           <Typography>$ {order.totalSalesTax.toFixed(2)}</Typography>
@@ -50,7 +50,7 @@ const OrderSummary = ({ order }: { order: IOrder }) => {
       </Grid>
       <Grid container className={classes.grid}>
         <Grid item lg={7} md={7} sm={7} xs={7}>
-          <Typography>ShippingTax</Typography>
+          <Typography>Shipping Tax</Typography>
         </Grid>
         <Grid item lg={5} md={5} sm={5} xs={5}>
           <Typography>$ {order.totalShippingTax.toFixed(2)}</Typography>
@@ -58,7 +58,7 @@ const OrderSummary = ({ order }: { order: IOrder }) => {
       </Grid>
       <Grid container className={classes.grid}>
         <Grid item lg={7} md={7} sm={7} xs={7}>
-          <Typography className={classes.total}>GrandTotal</Typography>
+          <Typography className={classes.total}>Grand Total</Typography>
         </Grid>
         <Grid item lg={5} md={5} sm={5} xs={5}>
           <Typography className={classes.total}>

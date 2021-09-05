@@ -8,6 +8,7 @@ import {
   addAddress,
   deleteAddress,
   setDefaultAddress,
+  guest,
 } from "../../controllers/userController.js";
 import { authenticate } from "../../middleware/authMiddleware.js";
 
@@ -23,6 +24,7 @@ router.delete("/address", authenticate, deleteAddress);
 router.put("/default-address", authenticate, setDefaultAddress);
 
 router.post("/login", login);
+router.post("/guest", guest);
 
 router.post("/register", register);
 
