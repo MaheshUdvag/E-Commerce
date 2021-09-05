@@ -6,11 +6,10 @@ import { listProducts } from "../actions/productActions";
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const productList = useSelector((state:any) => {
+  const productList = useSelector((state: any) => {
     return state.productListReducer;
   });
-  const { loading, products } = productList;
-  console.log(loading);
+  const { products } = productList;
   useEffect(() => {
     dispatch(listProducts());
   }, [dispatch]);

@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
 
 const useUserLogin = () => {
-  const { user, error } = useSelector((state: any) => {
+  const { user, error, authenticated } = useSelector((state: any) => {
     return state.userLogin;
   });
 
-  return { user, error };
+  return { user, error, authenticated };
 };
 
 export default useUserLogin;

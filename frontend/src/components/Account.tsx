@@ -1,4 +1,4 @@
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Typography } from "@material-ui/core";
 import React from "react";
 import FormContainer from "./FormContainer";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,8 +34,6 @@ const renderInput = ({
   type,
   autoComplete = "off",
 }: any) => {
-  console.log(meta);
-
   return (
     <TextField
       error={meta.touched && meta.error !== undefined}
@@ -73,6 +71,9 @@ const Account = (props: any) => {
           </Alert>
         ) : null}
         <form onSubmit={props.handleSubmit(onSubmit)}>
+          <Typography variant="h4" component="h4" className={classes.input}>
+            ACCOUNT
+          </Typography>
           <Field
             id="email-input"
             name="email"
@@ -106,8 +107,10 @@ const Account = (props: any) => {
 };
 
 const validate = (values: any) => {
-  console.log(values);
-  const errors:{email: string,name:string,[key: string]: string} = { email: "",name:"" };
+  const errors: { email: string; name: string; [key: string]: string } = {
+    email: "",
+    name: "",
+  };
   const { email } = values;
   const requiredFields = ["email", "name"];
   requiredFields.forEach((field) => {

@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { IOrder } from "./Interface/IOrder";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   summary: {
@@ -23,8 +24,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bolder",
   },
 }));
-const OrderSummary = ({ order }: { order:IOrder }) => {
+const OrderSummary = ({ order }: { order: IOrder }) => {
   const classes = useStyles();
+  const history = useHistory();
 
   return (
     <div className={classes.summary}>
@@ -72,7 +74,12 @@ const OrderSummary = ({ order }: { order:IOrder }) => {
       <br />
       <Grid container>
         <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Button color="primary" fullWidth={true} variant="contained">
+          <Button
+            color="primary"
+            fullWidth={true}
+            variant="contained"
+            onClick={() => history.push("/checkout")}
+          >
             Checkout
           </Button>
         </Grid>

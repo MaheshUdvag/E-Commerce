@@ -6,34 +6,38 @@ import ProductImage from "../components/ProductImage";
 import { getProductDetailsByPath } from "../actions/productActions";
 import Error from "../components/Error";
 import { useHistory } from "react-router-dom";
-import { IProduct, IProductDescription } from "../components/Interface/IProduct";
+import {
+  IProduct,
+  IProductDescription,
+} from "../components/Interface/IProduct";
 
-const ProductDetailPage = (props:any) => {
+const ProductDetailPage = (props: any) => {
   const path = props.match.params.name;
   const history = useHistory();
 
-  console.log(history);
-
   const dispatch = useDispatch();
-  const getProductDetail = useSelector((state:any) => {
+  const getProductDetail = useSelector((state: any) => {
     return state.productDetailByPathReducer;
   });
-  const { product }: {product: IProduct } = getProductDetail;
+  const { product }: { product: IProduct } = getProductDetail;
 
-  const description:IProductDescription =
+  const description: IProductDescription =
     product && Object.keys(product).length !== 0
       ? product.description.filter((desc) => desc.language.languageId === -1)[0]
-      : {_id: '',
-        shortDescription: '',
-        longDescription: '',
-        thumbnailImage: '',
-        fullImage: '',
-        language: {_id: '',
-          languageId: 0,
-          name: '',
-          description: '',
-          __v: 0}};
-  
+      : {
+          _id: "",
+          shortDescription: "",
+          longDescription: "",
+          thumbnailImage: "",
+          fullImage: "",
+          language: {
+            _id: "",
+            languageId: 0,
+            name: "",
+            description: "",
+            __v: 0,
+          },
+        };
 
   useEffect(() => {
     dispatch(getProductDetailsByPath(path));

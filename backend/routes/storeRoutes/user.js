@@ -4,6 +4,10 @@ import {
   register,
   profile,
   updateProfile,
+  updateAddress,
+  addAddress,
+  deleteAddress,
+  setDefaultAddress,
 } from "../../controllers/userController.js";
 import { authenticate } from "../../middleware/authMiddleware.js";
 
@@ -11,6 +15,12 @@ const router = Router();
 
 router.get("/profile", authenticate, profile);
 router.put("/profile", authenticate, updateProfile);
+
+router.post("/address", authenticate, addAddress);
+router.put("/address", authenticate, updateAddress);
+router.delete("/address", authenticate, deleteAddress);
+
+router.put("/default-address", authenticate, setDefaultAddress);
 
 router.post("/login", login);
 

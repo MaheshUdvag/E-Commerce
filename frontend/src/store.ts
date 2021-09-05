@@ -26,6 +26,7 @@ import {
   createOrderReducer,
   removeItemReducer,
 } from "./reducers/orderReducers";
+import { setCheckoutAddressReducer } from "./reducers/checkoutReducers";
 
 const reducer = combineReducers({
   form: formReducer,
@@ -41,6 +42,7 @@ const reducer = combineReducers({
   addUpdateItem: addUpdateOrderReducer,
   removeItem: removeItemReducer,
   createOrder: createOrderReducer,
+  checkoutAddress: setCheckoutAddressReducer,
 });
 
 type UserInfo = {

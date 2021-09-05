@@ -3,43 +3,32 @@ import Footer from "./components/Footer";
 import themes from "./theme/colors";
 import { ThemeProvider } from "@material-ui/core";
 import "@fontsource/roboto";
-import HomePage from "./screens/HomePage";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import CategoryPage from "./screens/CategoryPage";
-import ProductDetailPage from "./screens/ProductDetailPage";
-import LoginPage from "./screens/LoginPage";
-import RegisterPage from "./screens/RegisterPage";
-import ProfilePage from "./screens/ProfilePage";
-import CartPage from "./screens/CartPage";
+import { BrowserRouter as Router } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import useInitUserInformation from "./hooks/useInitUserInformation";
+import routes from "./Routes/Routes";
+import RouteUtils from "./Routes/RouteUtils";
+import useUserLogin from "./hooks/useUserLogin";
 
 const useStyles = makeStyles((theme) => ({
   app: {
-    minHeight: "60vh",
+    minHeight: "80vh",
   },
 }));
 
 const App = () => {
   const classes = useStyles();
   useInitUserInformation();
+  const { authenticated } = useUserLogin();
 
   return (
     <Router>
       <ThemeProvider theme={themes}>
         <Header />
         <div className={classes.app}>
-          <Route path="/" component={HomePage} exact></Route>
-          <Route path="/category/:name" component={CategoryPage} exact></Route>
-          <Route path="/login" component={LoginPage} exact></Route>
-          <Route path="/register" component={RegisterPage} exact></Route>
-          <Route
-            path="/product/:name"
-            component={ProductDetailPage}
-            exact
-          ></Route>
-          <Route path="/profile" component={ProfilePage} exact></Route>
-          <Route path="/cart" component={CartPage} exact></Route>
+          {routes.map((route) => (
+            <RouteUtils {...route} authenticated={authenticated} />
+          ))}
         </div>
         <Footer />
       </ThemeProvider>

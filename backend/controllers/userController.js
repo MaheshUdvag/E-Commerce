@@ -94,3 +94,199 @@ export const updateProfile = asyncHandler(async (req, res) => {
     throw new Error(`User not found`);
   }
 });
+
+export const addAddress = asyncHandler(async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    street1,
+    street2,
+    area,
+    city,
+    state,
+    country,
+    zipcode,
+    phone,
+    addressType,
+    isPrimary,
+  } = req.body;
+
+  const user = await UserSchema.findById(req.user._id);
+
+  if (user) {
+    const address = {
+      firstName,
+      lastName,
+      street1,
+      street2,
+      area,
+      city,
+      state,
+      country,
+      zipcode,
+      phone,
+      addressType,
+      isPrimary,
+    };
+
+    user.address = [...user.address, address];
+
+    user
+      .save()
+      .then(() =>
+        res.send({
+          message: "Address added successfully",
+        })
+      )
+      .catch((error) => {
+        throw error;
+      });
+  } else {
+    res.status(400);
+    throw new Error(`User not found`);
+  }
+});
+
+export const updateAddress = asyncHandler(async (req, res) => {
+  const {
+    _id,
+    firstName,
+    lastName,
+    street1,
+    street2,
+    area,
+    city,
+    state,
+    country,
+    zipcode,
+    phone,
+    addressType,
+    isPrimary,
+  } = req.body;
+
+  const user = await UserSchema.findById(req.user._id);
+  let addressUpdated = false;
+  if (user) {
+    user.address.every((address) => {
+      if (address._id.toString() === _id.toString()) {
+        address.firstName = firstName;
+        address.lastName = lastName;
+        address.street1 = street1;
+        address.street2 = street2;
+        address.area = area;
+        address.city = city;
+        address.state = state;
+        address.country = country;
+        address.zipcode = zipcode;
+        address.phone = phone;
+        address.addressType = addressType;
+        address.isPrimary = isPrimary;
+        addressUpdated = true;
+      } else {
+        if (isPrimary === 1) {
+          address.isPrimary = 0;
+        }
+      }
+      return true;
+    });
+
+    if (!addressUpdated) {
+      throw new Error("Unable to find the address with the given id");
+    }
+
+    user
+      .save()
+      .then(() =>
+        res.send({
+          message: "Address updated successfully",
+        })
+      )
+      .catch((error) => {
+        throw error;
+      });
+  } else {
+    res.status(400);
+    throw new Error(`User not found`);
+  }
+});
+
+export const deleteAddress = asyncHandler(async (req, res) => {
+  const { _id } = req.body;
+
+  const user = await UserSchema.findById(req.user._id);
+
+  let addressPresent = false;
+
+  if (user) {
+    user.address.every((addr) => {
+      if (addr._id.toString() === _id.toString()) {
+        addressPresent = true;
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+    if (!addressPresent) {
+      throw new Error("Unable to find the address with the given id");
+    }
+
+    const address = user.address.filter(
+      (addr) => addr._id.toString() !== _id.toString()
+    );
+
+    user.address = address;
+
+    user
+      .save()
+      .then(() =>
+        res.send({
+          message: "Address deleted successfully",
+        })
+      )
+      .catch((error) => {
+        throw error;
+      });
+  } else {
+    res.status(400);
+    throw new Error(`User not found`);
+  }
+});
+
+export const setDefaultAddress = asyncHandler(async (req, res) => {
+  const { _id } = req.body;
+
+  const user = await UserSchema.findById(req.user._id);
+
+  let addressUpdated = false;
+
+  if (user) {
+    user.address.every((address) => {
+      if (address._id.toString() === _id.toString()) {
+        address.isPrimary = 1;
+        addressUpdated = true;
+      } else {
+        address.isPrimary = 0;
+      }
+      return true;
+    });
+
+    if (!addressUpdated) {
+      throw new Error("Unable to find the address with the given id");
+    }
+
+    user
+      .save()
+      .then(() =>
+        res.send({
+          message: "Default Address updated successfully",
+        })
+      )
+      .catch((error) => {
+        throw error;
+      });
+  } else {
+    res.status(400);
+    throw new Error(`User not found`);
+  }
+});

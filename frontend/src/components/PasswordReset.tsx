@@ -1,4 +1,4 @@
-import { TextField, Button } from "@material-ui/core";
+import { TextField, Button, Typography } from "@material-ui/core";
 import React from "react";
 import FormContainer from "./FormContainer";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,9 +33,7 @@ const renderInput = ({
   label,
   type,
   autoComplete = "off",
-}:any) => {
-  console.log(meta);
-
+}: any) => {
   return (
     <TextField
       error={meta.touched && meta.error !== undefined}
@@ -51,11 +49,11 @@ const renderInput = ({
   );
 };
 
-const PasswordReset = (props:any) => {
+const PasswordReset = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const onSubmit = ({ email, name }: {email: string,name: string}) => {
+  const onSubmit = ({ email, name }: { email: string; name: string }) => {
     dispatch(updateUser(email, name));
   };
 
@@ -73,6 +71,9 @@ const PasswordReset = (props:any) => {
           </Alert>
         ) : null}
         <form onSubmit={props.handleSubmit(onSubmit)}>
+          <Typography variant="h4" component="h4" className={classes.input}>
+            RESET PASSWORD
+          </Typography>
           <Field
             id="current-password-input"
             name="currentPassword"
@@ -114,8 +115,12 @@ const PasswordReset = (props:any) => {
   );
 };
 
-const validate = (values:any) => {
-  const errors:{newPassword: string,newPasswordConfirm:string,[key: string]: string} = {newPasswordConfirm:'',newPassword:''};
+const validate = (values: any) => {
+  const errors: {
+    newPassword: string;
+    newPasswordConfirm: string;
+    [key: string]: string;
+  } = { newPasswordConfirm: "", newPassword: "" };
   const { newPassword, newPasswordConfirm } = values;
   const requiredFields = [
     "currentPassword",

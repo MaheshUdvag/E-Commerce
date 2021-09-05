@@ -1,6 +1,6 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
-import {IFormContainer} from './Interface/IFormContainer';
+import { IFormContainer } from "./Interface/IFormContainer";
 
 const FormContainer = ({
   children,
@@ -12,7 +12,7 @@ const FormContainer = ({
   sm,
   xs,
   minHeight,
-}:IFormContainer) => {
+}: IFormContainer) => {
   return (
     <>
       <Grid

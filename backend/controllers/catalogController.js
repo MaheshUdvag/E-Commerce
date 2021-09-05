@@ -74,7 +74,6 @@ export const updateCatalog = asyncHandler(async (req, res) => {
     catalog.categories.every((element) => {
       if (element._id.toString() === category._id.toString()) {
         containsCategory = true;
-        console.log("inside " + element._id.toString());
         return false;
       }
     });

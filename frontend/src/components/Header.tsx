@@ -156,11 +156,7 @@ const Header = () => {
                 <Button
                   startIcon={<CartIcon />}
                   color="secondary"
-                  onClick={() =>
-                    user && Object.keys(user).length > 0
-                      ? history.push("/cart")
-                      : null
-                  }
+                  onClick={() => history.push("/cart")}
                 >
                   CART
                 </Button>

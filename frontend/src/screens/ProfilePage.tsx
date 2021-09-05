@@ -1,7 +1,7 @@
 import { Grid, Typography, Container, Button } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { getUser } from "../actions/userActions";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -12,7 +12,7 @@ import CardGiftcardIcon from "@material-ui/icons/CardGiftcard";
 import Account from "../components/Account";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import PasswordReset from "../components/PasswordReset";
-import useUserLogin from "../hooks/useUserLogin";
+import AddressBook from "../components/AddressBook";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -48,44 +48,16 @@ const ProfilePage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [content, setContent] = useState<any>(null);
-  const [selected, setSelected] = useState("Account");
-  const userProfileInfo = useSelector((state: any) => {
+  const { user: profile } = useSelector((state: any) => {
     return state.userProfile;
   });
-  const profile = userProfileInfo.user;
-
-  const { user } = useUserLogin();
-
-  const renderAccount = () => {
-    if (profile) {
-      setContent(<Account initialValues={profile} />);
-      setSelected("Account");
-    } else {
-      setContent(null);
-    }
-  };
-
-  const renderChangePassword = () => {
-    if (profile) {
-      setContent(<PasswordReset />);
-      setSelected("Change Password");
-    } else {
-      setContent(null);
-    }
-  };
+  const pathName = props.history.location.pathname;
 
   useEffect(() => {
-    if (!user) {
-      history.push("/");
-    }
     if (!profile) {
       dispatch(getUser());
-    } else {
-      setContent(<Account initialValues={profile} />);
-      setSelected("Account");
     }
-  }, [user, dispatch, history, profile]);
+  }, [dispatch, history, profile]);
 
   return (
     <>
@@ -100,9 +72,11 @@ const ProfilePage = (props: any) => {
               fullWidth={true}
               size="large"
               className={
-                selected === "Account" ? classes.buttonSelected : classes.button
+                pathName === "/profile"
+                  ? classes.buttonSelected
+                  : classes.button
               }
-              onClick={renderAccount}
+              onClick={() => history.push("/profile")}
             >
               Account
             </Button>
@@ -111,11 +85,11 @@ const ProfilePage = (props: any) => {
               fullWidth={true}
               size="large"
               className={
-                selected === "Change Password"
+                pathName === "/profile/change-password"
                   ? classes.buttonSelected
                   : classes.button
               }
-              onClick={renderChangePassword}
+              onClick={() => history.push("/profile/change-password")}
             >
               Change Password
             </Button>
@@ -123,9 +97,12 @@ const ProfilePage = (props: any) => {
               startIcon={<ShoppingCartIcon />}
               fullWidth={true}
               className={
-                selected === "Orders" ? classes.buttonSelected : classes.button
+                pathName === "/profile/orders"
+                  ? classes.buttonSelected
+                  : classes.button
               }
               size="large"
+              onClick={() => history.push("/profile/orders")}
             >
               Orders
             </Button>
@@ -134,10 +111,11 @@ const ProfilePage = (props: any) => {
               fullWidth={true}
               size="large"
               className={
-                selected === "Address Book"
+                pathName === "/profile/address"
                   ? classes.buttonSelected
                   : classes.button
               }
+              onClick={() => history.push("/profile/address")}
             >
               Address Book
             </Button>
@@ -146,10 +124,11 @@ const ProfilePage = (props: any) => {
               fullWidth={true}
               size="large"
               className={
-                selected === "Wish List"
+                pathName === "/profile/wish-list"
                   ? classes.buttonSelected
                   : classes.button
               }
+              onClick={() => history.push("/profile/wish-list")}
             >
               Wish List
             </Button>
@@ -158,19 +137,27 @@ const ProfilePage = (props: any) => {
               fullWidth={true}
               size="large"
               className={
-                selected === "Gift Cards"
+                pathName === "/profile/gift-cards"
                   ? classes.buttonSelected
                   : classes.button
               }
+              onClick={() => history.push("/profile/gift-cards")}
             >
               Gift Cards
             </Button>
           </Grid>
-          <Grid item lg={6} md={6} sm={12} xs={12}>
-            <Typography variant="h4" component="h4" className={classes.title}>
-              {selected.toUpperCase()}
-            </Typography>
-            {content}
+          <Grid item lg={8} md={6} sm={12} xs={12}>
+            <Switch>
+              <Route path="/profile" exact>
+                <Account initialValues={profile} />
+              </Route>
+              <Route path="/profile/address">
+                <AddressBook title="ADDRESS" address={profile?.address} />
+              </Route>
+              <Route path="/profile/change-password">
+                <PasswordReset />
+              </Route>
+            </Switch>
           </Grid>
         </Grid>
       </Container>

@@ -1,3 +1,4 @@
+import { IUser } from "../components/Interface/IUser";
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -17,13 +18,13 @@ import {
 export const userLoginReducer = (state = {}, action: any) => {
   switch (action.type) {
     case USER_LOGIN_REQUEST:
-      return { loading: true };
+      return { loading: true, authenticated: false };
     case USER_LOGIN_SUCCESS:
-      return { loading: false, user: action.payload };
+      return { loading: false, user: action.payload, authenticated: true };
     case USER_LOGIN_FAIL:
-      return { error: action.payload };
+      return { error: action.payload, authenticated: false };
     case USER_LOGOUT:
-      return {};
+      return { authenticated: false };
     default:
       return state;
   }
@@ -42,7 +43,19 @@ export const userRegisterReducer = (state = {}, action: any) => {
   }
 };
 
-export const userProfileReducer = (state = {}, action: any) => {
+const profilePayload = {
+  _id: "",
+  loginId: "",
+  name: "",
+  email: "",
+  store: "",
+  address: [],
+};
+
+export const userProfileReducer = (
+  state: IUser = profilePayload,
+  action: any
+) => {
   switch (action.type) {
     case USER_PROFILE_REQUEST:
       return { loading: true };

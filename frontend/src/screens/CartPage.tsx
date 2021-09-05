@@ -17,13 +17,9 @@ const CartPage = () => {
   const { order, error } = useActiveOrder();
 
   useEffect(() => {
-    console.log(typeof user);
-
     if ((user && Object.keys(user).length === 0) || user === undefined) {
       history.push("/");
     } else {
-      console.log("elses");
-
       dispatch(getActiveOrder());
     }
   }, [user, history, dispatch]);
