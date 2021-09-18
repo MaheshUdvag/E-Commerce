@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import AddressSchema from "./associations/Address.js";
 
 import OrderItemSchema from "./associations/OrderItem.js";
+import PaymentSchema from "./associations/Payment.js";
 
 const Schema = mongoose.Schema;
 
@@ -18,6 +19,7 @@ const OrderSchema = new Schema(
     },
     address: [AddressSchema],
     orderItems: [OrderItemSchema],
+    payment: PaymentSchema,
   },
   {
     timestamps: true,

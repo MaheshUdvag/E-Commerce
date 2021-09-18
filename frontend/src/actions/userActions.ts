@@ -5,6 +5,7 @@ import {
   userRegister,
   userUpdate,
 } from "../apis/userApis";
+import { ACTIVE_ORDER_SUCCESS } from "../ActionTypes/order";
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -19,7 +20,7 @@ import {
   USER_UPDATE_FAIL,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
-} from "../constants/userConstants";
+} from "../ActionTypes/user";
 
 export const loginUser =
   (email: string, password: string) => async (dispatch: any) => {
@@ -36,6 +37,7 @@ export const loginUser =
 export const logoutUser = () => async (dispatch: any) => {
   localStorage.removeItem("loggedInUser");
   dispatch({ type: USER_LOGOUT });
+  dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: {} });
 };
 
 export const registerUser =

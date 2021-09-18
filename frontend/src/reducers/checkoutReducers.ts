@@ -1,4 +1,4 @@
-import { SET_CHECKOUT_ADDRESS } from "../constants/checkoutConstatnts";
+import { SET_CHECKOUT_ADDRESS } from "../ActionTypes/checkout";
 
 export const setCheckoutAddressReducer = (state = { _id: "" }, action: any) => {
   if (action.type === SET_CHECKOUT_ADDRESS) {

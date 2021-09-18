@@ -85,6 +85,7 @@ const Header = () => {
   const logOut = () => {
     dispatch(logoutUser());
     handleClose();
+    history.push("/");
   };
 
   const profile = () => {

@@ -1,14 +1,15 @@
-import CategoryPage from "../screens/CategoryPage";
-import HomePage from "../screens/HomePage";
-import LoginPage from "../screens/LoginPage";
-import RegisterPage from "../screens/RegisterPage";
-import ProfilePage from "../screens/ProfilePage";
-import CartPage from "../screens/CartPage";
+import CategoryPage from "../screens/Category/CategoryPage";
+import HomePage from "../screens/Home/HomePage";
+import LoginPage from "../screens/Login/LoginPage";
+import RegisterPage from "../screens/Register/RegisterPage";
+import ProfilePage from "../screens/Profile/ProfilePage";
+import CartPage from "../screens/Cart/CartPage";
 import Address from "../components/Address";
-import ProductDetailPage from "../screens/ProductDetailPage";
+import ProductDetailPage from "../screens/PDP/ProductDetailPage";
 import PasswordReset from "../components/PasswordReset";
 import AddressBook from "../components/AddressBook";
-import CheckoutPage from "../screens/CheckoutPage";
+import CheckoutPage from "../screens/Checkout/CheckoutPage";
+import OrderSuccessPage from "../screens/OrderSuccess/OrderSuccessPage";
 
 export interface IRoute {
   path: string;
@@ -84,6 +85,11 @@ const routes: IRoute[] = [
     path: "/checkout",
     component: CheckoutPage,
     exact: false,
+  },
+  {
+    path: "/orderSummary",
+    component: OrderSuccessPage,
+    exact: true,
   },
 ];
 

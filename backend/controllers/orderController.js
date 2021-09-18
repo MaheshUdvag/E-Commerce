@@ -15,10 +15,11 @@ export const createOrder = asyncHandler(async (req, res) => {
     throw new Error("Active order exists");
   } else {
     const product = await Product.findById(productId);
-    const price =
-      (product.price.offerPrice || product.price.listPrice) * quantity;
-    const salesTax = price * (5 / 100);
-    const shippingTax = price * (7 / 100);
+    const price = (
+      (product.price.offerPrice || product.price.listPrice) * quantity
+    ).toFixed(2);
+    const salesTax = (price * (5 / 100)).toFixed(2);
+    const shippingTax = (price * (7 / 100)).toFixed(2);
     const orderItem = {
       price,
       salesTax,

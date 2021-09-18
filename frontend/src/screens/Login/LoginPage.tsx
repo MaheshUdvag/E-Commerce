@@ -1,13 +1,15 @@
 import { Grid, Typography, TextField, Button } from "@material-ui/core";
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import FormContainer from "../components/FormContainer";
-import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../actions/userActions";
+import FormContainer from "../../components/FormContainer";
 import { Field, reduxForm } from "redux-form";
 import { Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-import { registerUser } from "../actions/userActions";
-import useUserLogin from "../hooks/useUserLogin";
+import useUserLogin from "../../hooks/useUserLogin";
+import { useTranslation } from "react-i18next";
+import { LOGIN_PAGE_CONSTANTS } from "./LoginPageConstants";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -51,26 +53,31 @@ const renderInput = ({
   );
 };
 
-const RegisterPage = (props: any) => {
+const LoginPage = (props: any) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { t } = useTranslation();
+  const { LOGIN, SIGN_UP, SIGN_IN, NEW_CUSTOMER } = LOGIN_PAGE_CONSTANTS;
 
   const onSubmit = ({
     email,
     password,
-    name,
   }: {
     email: string;
     password: string;
-    name: string;
   }) => {
-    dispatch(registerUser(email, password, name));
+    dispatch(loginUser(email, password));
+    history.goBack();
   };
 
-  const userRegisterInfo = useSelector((state: any) => {
-    return state.userRegister;
-  });
-  const { error } = userRegisterInfo;
+  const { error, authenticated } = useUserLogin();
+
+  useEffect(() => {
+    if (authenticated) {
+      history.push("/");
+    }
+  }, [authenticated, history]);
 
   return (
     <>
@@ -84,7 +91,7 @@ const RegisterPage = (props: any) => {
         xs={12}
       >
         <Typography variant="h4" component="h4" className={classes.title}>
-          SIGN IN
+          {t(SIGN_IN)}
         </Typography>
         {error ? (
           <Alert severity="error" className={classes.alert}>
@@ -102,26 +109,9 @@ const RegisterPage = (props: any) => {
             className={classes.input}
           />
           <Field
-            id="name-input"
-            name="name"
-            label="Name"
-            type="text"
-            autoComplete="on"
-            component={renderInput}
-            className={classes.input}
-          />
-          <Field
             id="password-input"
             name="password"
             label="Password"
-            type="password"
-            component={renderInput}
-            className={classes.input}
-          />
-          <Field
-            id="password-confirm-input"
-            name="confirmPassword"
-            label="Confirm Password"
             type="password"
             component={renderInput}
             className={classes.input}
@@ -132,13 +122,13 @@ const RegisterPage = (props: any) => {
             variant="contained"
             className={classes.button}
           >
-            Register
+            {t(LOGIN)}
           </Button>
         </form>
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="body1" component="p" className={classes.title}>
-              Already a Customer? <Link to="/login">Sign In</Link>
+              {t(NEW_CUSTOMER)} <Link to="/register">{t(SIGN_UP)}</Link>
             </Typography>
           </Grid>
         </Grid>
@@ -148,33 +138,26 @@ const RegisterPage = (props: any) => {
 };
 
 const validate = (values: any) => {
-  const errors: {
-    email: string;
-    password: string;
-    confirmPassword: string;
-    [key: string]: string;
-  } = { email: "", password: "", confirmPassword: "" };
-  const { email, password, confirmPassword } = values;
-  const requiredFields = ["email", "password", "name", "confirmPassword"];
+  const errors: { email: string; password: string; [key: string]: string } = {
+    email: "",
+    password: "",
+  };
+  const requiredFields = ["email", "password"];
   requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = `${field[0].toUpperCase() + field.substr(1)} is Required`;
     }
   });
-  if (email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+  if (
+    values.email &&
+    !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+  ) {
     errors.email = "Invalid email address";
   }
-  if (password && password.length < 8) {
-    errors.password = "Password must have atleast 8 characters";
-  }
-  if (password && confirmPassword && password !== confirmPassword) {
-    errors.confirmPassword = "Passwords dont match";
-  }
-
   return errors;
 };
 
 export default reduxForm({
-  form: "registerForm",
+  form: "loginForm",
   validate,
-})(RegisterPage);
+})(LoginPage);

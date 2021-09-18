@@ -56,9 +56,10 @@ const options = [
   },
 ];
 
-const ProductList = (props:any) => {
+const ProductList = (props: any) => {
   const classes = useStyles();
   const products = props.products;
+  const loading = props.loading;
   const page = props.page;
   const [sortOptions, setSortOptions] = React.useState("EUR");
 
@@ -68,7 +69,7 @@ const ProductList = (props:any) => {
 
   return (
     <div>
-      {products ? (
+      {products && !loading ? (
         <Container className={classes.container}>
           {page === "category" ? (
             <img
@@ -109,7 +110,7 @@ const ProductList = (props:any) => {
 
           <Grid container alignItems="center" spacing={6}>
             {products
-              ? products.map((product:IProduct) => {
+              ? products.map((product: IProduct) => {
                   return (
                     <Grid key={product._id} item xs={12} sm={5} lg={3} md={4}>
                       <Product product={product} />
@@ -119,8 +120,10 @@ const ProductList = (props:any) => {
               : null}
           </Grid>
         </Container>
-      ) : (
+      ) : !loading ? (
         <Error />
+      ) : (
+        <></>
       )}
     </div>
   );

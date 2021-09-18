@@ -8,7 +8,7 @@ interface Props {
   address?: IAddress[];
   page?: string;
   selectedAddress?: string;
-  title: string;
+  title?: string;
 }
 
 const AddressBook: React.FC<Props> = ({
@@ -22,9 +22,13 @@ const AddressBook: React.FC<Props> = ({
   );
 
   const sortAddressByPrimary = useCallback(() => {
-    const primaryAddress: IAddress[] | undefined = address?.filter(
+    let primaryAddress: IAddress[] | undefined = address?.filter(
       (addr) => addr.isPrimary === "1"
     );
+
+    if (primaryAddress === undefined) {
+      primaryAddress = address;
+    }
 
     const addressMap: IAddress[] | undefined = address?.filter(
       (addr) => addr.isPrimary !== "1"
@@ -44,20 +48,23 @@ const AddressBook: React.FC<Props> = ({
   return (
     <>
       <Grid container spacing={4} style={{ marginBottom: 10 }}>
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Typography variant="h4" component="h4">
-            {title}
-          </Typography>
-        </Grid>
-        {addressList?.map((addr, index) => (
-          <Grid key={index} item lg={4} md={6} sm={6} xs={12}>
-            <AddressCard
-              address={addr}
-              page={page}
-              selected={selectedAddress === addr._id ? true : false}
-            />
+        {title && (
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Typography variant="h4" component="h4">
+              {title}
+            </Typography>
           </Grid>
-        ))}
+        )}
+        {addressList?.length !== null &&
+          addressList?.map((addr, index) => (
+            <Grid key={index} item lg={4} md={6} sm={6} xs={12}>
+              <AddressCard
+                address={addr}
+                page={page}
+                selected={selectedAddress === addr._id ? true : false}
+              />
+            </Grid>
+          ))}
         <Grid item lg={4} md={6} sm={6} xs={12}>
           <AddressCard />
         </Grid>

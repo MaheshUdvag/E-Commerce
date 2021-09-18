@@ -21,13 +21,18 @@
   },
   "homepage": "https://github.com/MaheshUdvag/E-Commerce#readme",
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.2",
     "bcrypt": "^5.0.1",
     "concurrently": "^6.2.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
+    "i18next": "^20.6.1",
+    "i18next-browser-languagedetector": "^6.1.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
-    "nodemon": "^2.0.12"
+    "nodemon": "^2.0.12",
+    "notistack": "^1.0.10",
+    "react-i18next": "^11.12.0"
   }
 }

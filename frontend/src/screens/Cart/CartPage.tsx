@@ -1,16 +1,13 @@
 import { Container, Grid } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { getActiveOrder } from "../actions/orderActions";
-import CartItems from "../components/CartItems";
-import Error from "../components/Error";
-import OrderSummary from "../components/OrderSummary";
-import useActiveOrder from "../hooks/useActiveOrder";
-import useUserLogin from "../hooks/useUserLogin";
+import { getActiveOrder } from "../../actions/orderActions";
+import CartItems from "../../components/CartItems";
+import EmptyCart from "../../components/EmptyCart";
+import OrderSummary from "../../components/OrderSummary";
+import useActiveOrder from "../../hooks/useActiveOrder";
 
 const CartPage = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
   const { order, error } = useActiveOrder();
 
@@ -30,7 +27,7 @@ const CartPage = () => {
           </Grid>
         </Grid>
       ) : (
-        <Error />
+        <EmptyCart />
       )}
     </Container>
   );

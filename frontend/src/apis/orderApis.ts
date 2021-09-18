@@ -11,7 +11,12 @@ export const activeOrder = (token: string) => {
   });
 };
 
-export const addUpdateItem = (orderId: string, productId: string, quantity: number, token: string) => {
+export const addUpdateItem = (
+  orderId: string,
+  productId: string,
+  quantity: number,
+  token: string
+) => {
   return axios({
     method: "POST",
     url: "/api/orders/cart",
@@ -27,7 +32,11 @@ export const addUpdateItem = (orderId: string, productId: string, quantity: numb
   });
 };
 
-export const createOrder = (productId: string, quantity: number, token: string) => {
+export const createOrder = (
+  productId: string,
+  quantity: number,
+  token: string
+) => {
   return axios({
     method: "POST",
     url: "/api/orders",
@@ -43,13 +52,76 @@ export const createOrder = (productId: string, quantity: number, token: string) 
   });
 };
 
-export const removeItem = (orderId: string, productId: string, token: string) => {
+export const removeItem = (
+  orderId: string,
+  productId: string,
+  token: string
+) => {
   return axios({
     method: "DELETE",
     url: "/api/orders/cart",
     data: {
       orderId,
       productId,
+    },
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+export const createPayPayOrder = (
+  orderId: string,
+  token: string,
+  addressId: string
+) => {
+  return axios({
+    method: "POST",
+    url: "/api/orders/paypal/create",
+    data: {
+      orderId,
+      addressId,
+    },
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+export const updateOrderShippingAddress = (
+  payPalOrderId: string,
+  orderId: string,
+  token: string,
+  address: any
+) => {
+  return axios({
+    method: "POST",
+    url: "/api/orders/paypal/updateAddress",
+    data: {
+      orderId,
+      address,
+      payPalOrderId,
+    },
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+export const approvePayPalOrder = (
+  payPalOrderId: string,
+  orderId: string,
+  token: string
+) => {
+  return axios({
+    method: "POST",
+    url: "/api/orders/paypal/approve",
+    data: {
+      payPalOrderId,
+      orderId,
     },
     headers: {
       "content-type": "application/json",

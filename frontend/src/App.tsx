@@ -9,6 +9,7 @@ import useInitUserInformation from "./hooks/useInitUserInformation";
 import routes from "./Routes/Routes";
 import RouteUtils from "./Routes/RouteUtils";
 import useUserLogin from "./hooks/useUserLogin";
+import { Suspense } from "react";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -23,19 +24,21 @@ const App = () => {
 
   return (
     <Router>
-      <ThemeProvider theme={themes}>
-        <Header />
-        <div className={classes.app}>
-          {routes.map((route, index) => (
-            <RouteUtils
-              key={index}
-              route={route}
-              authenticated={authenticated}
-            />
-          ))}
-        </div>
-        <Footer />
-      </ThemeProvider>
+      <Suspense fallback="...is loading">
+        <ThemeProvider theme={themes}>
+          <Header />
+          <div className={classes.app}>
+            {routes.map((route, index) => (
+              <RouteUtils
+                key={index}
+                route={route}
+                authenticated={authenticated}
+              />
+            ))}
+          </div>
+          <Footer />
+        </ThemeProvider>
+      </Suspense>
     </Router>
   );
 };

@@ -7,11 +7,12 @@ export const addUpdateItemToCart = asyncHandler(async (req, res) => {
 
   const product = await Product.findById(productId);
 
-  const price =
-    (product.price.offerPrice || product.price.listPrice) * quantity;
+  const price = (
+    (product.price.offerPrice || product.price.listPrice) * quantity
+  ).toFixed(2);
 
-  const salesTax = price * (5 / 100);
-  const shippingTax = price * (7 / 100);
+  const salesTax = (price * (5 / 100)).toFixed(2);
+  const shippingTax = (price * (7 / 100)).toFixed(2);
 
   let order = await Order.findById(orderId).populate({
     path: "orderItems",
@@ -23,49 +24,18 @@ export const addUpdateItemToCart = asyncHandler(async (req, res) => {
 
   if (order) {
     let itemExists = false;
-
-    let orderPrice = await Order.aggregate([
-      { $unwind: "$orderItems" },
-      {
-        $group: {
-          _id: "$_id",
-          total: { $sum: "$orderItems.price" },
-          totalSalesTax: { $sum: "$orderItems.salesTax" },
-          totalShippingTax: { $sum: "$orderItems.shippingTax" },
-        },
-      },
-      {
-        $match: { _id: order._id },
-      },
-    ]);
-
-    if (orderPrice.length > 0) {
-      orderPrice = orderPrice[0];
-    } else {
-      throw new Error("Error occured while adding item");
-    }
-
-    let total = orderPrice.total;
-    let totalSalesTax = orderPrice.totalSalesTax;
-    let totalShippingTax = orderPrice.totalShippingTax;
-
     order.orderItems.every((item) => {
       if (item.product._id.toString() === product._id.toString()) {
         if (quantity !== item.quantity) {
-          total -= item.price;
-          totalSalesTax -= item.salesTax;
-          totalShippingTax -= item.shippingTax;
-          const price =
-            (product.price.offerPrice || product.price.listPrice) * quantity;
-          const salesTax = price * (5 / 100);
-          const shippingTax = price * (7 / 100);
+          const price = (
+            (product.price.offerPrice || product.price.listPrice) * quantity
+          ).toFixed(2);
+          const salesTax = (price * (5 / 100)).toFixed(2);
+          const shippingTax = (price * (7 / 100)).toFixed(2);
           item.quantity = quantity;
           item.price = price;
           item.salesTax = salesTax;
           item.shippingTax = shippingTax;
-          total += price;
-          totalSalesTax += salesTax;
-          totalShippingTax += shippingTax;
         }
         itemExists = true;
         return false;
@@ -83,22 +53,45 @@ export const addUpdateItemToCart = asyncHandler(async (req, res) => {
         quantity,
       };
 
-      total += price;
-      totalSalesTax += salesTax;
-      totalShippingTax += shippingTax;
-
       const orderItems = [...order.orderItems, orderItem];
 
       order.orderItems = orderItems;
     }
 
-    order.total = total;
-    order.totalSalesTax = totalSalesTax;
-    order.totalShippingTax = totalShippingTax;
-
     order
       .save()
-      .then((order) => res.send(order))
+      .then(async (order) => {
+        let orderPrice = await Order.aggregate([
+          { $unwind: "$orderItems" },
+          {
+            $group: {
+              _id: "$_id",
+              total: { $sum: "$orderItems.price" },
+              totalSalesTax: { $sum: "$orderItems.salesTax" },
+              totalShippingTax: { $sum: "$orderItems.shippingTax" },
+            },
+          },
+          {
+            $match: { _id: order._id },
+          },
+        ]);
+
+        if (orderPrice.length > 0) {
+          orderPrice = orderPrice[0];
+        } else {
+          throw new Error("Error occured while adding item");
+        }
+        order.total = orderPrice.total.toFixed(2);
+        order.totalSalesTax = orderPrice.totalSalesTax.toFixed(2);
+        order.totalShippingTax = orderPrice.totalShippingTax.toFixed(2);
+
+        order
+          .save()
+          .then((order) => res.send(order))
+          .catch((err) => {
+            throw err;
+          });
+      })
       .catch((err) => {
         throw err;
       });

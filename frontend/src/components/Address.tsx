@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { getUser } from "../actions/userActions";
+import useUserProfile from "../hooks/useUserProfile";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -78,6 +79,11 @@ const Address = (props: any) => {
   const history = useHistory();
   const [addressEdit, setAddressEdit] = useState<Boolean>(false);
 
+  const {
+    user: { token },
+  } = useUserLogin();
+  const { user } = useUserProfile();
+
   useEffect(() => {
     const initialValues = props.location.state
       ? props.location.state.initialValues
@@ -86,10 +92,6 @@ const Address = (props: any) => {
       setAddressEdit(true);
     }
   }, [dispatch, props.location.state]);
-
-  const {
-    user: { token },
-  } = useUserLogin();
 
   const onSubmit = async (address: IAddress) => {
     let data = { status: 404 };
@@ -102,6 +104,10 @@ const Address = (props: any) => {
     } else {
       address.addressType = "SB";
       address.isPrimary = "0";
+
+      if (user.address.length === 0) {
+        address.isPrimary = "1";
+      }
       data = await addAddress(address, token);
     }
 

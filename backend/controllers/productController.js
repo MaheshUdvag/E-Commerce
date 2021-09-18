@@ -78,6 +78,7 @@ export const addProduct = asyncHandler(async (req, res) => {
   const fullImage = req.body.fullImage;
   const name = req.body.name;
   const sku = req.body.sku;
+  const path = req.body.name.replace(/\s/g, "-") + "-" + req.body.sku;
   const buyable = req.body.buyable;
   const type = req.body.type;
   const listPrice = req.body.listPrice;
@@ -88,6 +89,7 @@ export const addProduct = asyncHandler(async (req, res) => {
   const language = await Language.findOne({ languageId });
   const attributes = req.body.attributes;
   const attachments = req.body.attachments;
+  const categoryName = req.body.categoryName;
 
   const productDescription = {
     shortDescription,
@@ -106,6 +108,7 @@ export const addProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name,
     sku,
+    path,
     buyable,
     type,
     created,
@@ -117,7 +120,30 @@ export const addProduct = asyncHandler(async (req, res) => {
   });
   product
     .save()
-    .then((product) => res.send(product))
+    .then(async (product) => {
+      const category = await CategorySchema.findOne({
+        name: categoryName,
+      }).populate({
+        path: "products",
+        populate: {
+          path: "description",
+          populate: {
+            path: "language",
+            model: "language",
+          },
+        },
+      });
+
+      category.products = [...category.products, product];
+      category
+        .save()
+        .then(() => {
+          res.send(product);
+        })
+        .catch((err) => {
+          throw err;
+        });
+    })
     .catch((err) => {
       throw err;
     });

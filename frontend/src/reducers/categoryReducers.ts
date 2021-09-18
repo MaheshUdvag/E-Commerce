@@ -2,15 +2,18 @@ import {
   CATEGORY_LIST_SUCCESS,
   CATEGORY_LIST_FAIL,
   CATEGORY_LIST_REQUEST,
-} from "../constants/categoryConstants";
+} from "../ActionTypes/category";
 
-type ACTION = {type: string,payload: string}
+type ACTION = { type: string; payload: string };
 
 interface Categories {
-  categories: []
-} 
+  categories: [];
+}
 
-export const categoryListReducer = (state:Categories = { categories: [] }, action: ACTION) => {
+export const categoryListReducer = (
+  state: Categories = { categories: [] },
+  action: ACTION
+) => {
   switch (action.type) {
     case CATEGORY_LIST_REQUEST:
       return { loading: true };

@@ -9,7 +9,7 @@ import {
   PRODUCT_LIST_REQUEST,
   PRODUCT_DETAIL_BY_PATH_REQUEST,
   PRODUCT_LIST_BY_CATEGORY_REQUEST,
-} from "../constants/productConstants";
+} from "../ActionTypes/product";
 
 export const productListReducer = (
   state = { products: [] },

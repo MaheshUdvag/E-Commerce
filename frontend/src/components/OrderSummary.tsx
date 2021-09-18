@@ -24,7 +24,16 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bolder",
   },
 }));
-const OrderSummary = ({ order }: { order: IOrder }) => {
+
+interface IOrderSummary {
+  order: IOrder;
+  showCheckout?: boolean;
+}
+
+const OrderSummary: React.FC<IOrderSummary> = ({
+  order,
+  showCheckout = true,
+}) => {
   const classes = useStyles();
   const history = useHistory();
 
@@ -72,18 +81,20 @@ const OrderSummary = ({ order }: { order: IOrder }) => {
         </Grid>
       </Grid>
       <br />
-      <Grid container>
-        <Grid item lg={12} md={12} sm={12} xs={12}>
-          <Button
-            color="primary"
-            fullWidth={true}
-            variant="contained"
-            onClick={() => history.push("/checkout")}
-          >
-            Checkout
-          </Button>
+      {showCheckout && (
+        <Grid container>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Button
+              color="primary"
+              fullWidth={true}
+              variant="contained"
+              onClick={() => history.push("/checkout")}
+            >
+              Checkout
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </div>
   );
 };

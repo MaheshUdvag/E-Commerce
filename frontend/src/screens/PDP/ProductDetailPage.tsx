@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Container, Grid } from "@material-ui/core";
-import ProductDetail from "../components/ProductDetail";
-import ProductImage from "../components/ProductImage";
-import { getProductDetailsByPath } from "../actions/productActions";
-import Error from "../components/Error";
+import ProductDetail from "../../components/ProductDetail";
+import ProductImage from "../../components/ProductImage";
+import { getProductDetailsByPath } from "../../actions/productActions";
+import Error from "../../components/Error";
 import { useHistory } from "react-router-dom";
 import {
   IProduct,
   IProductDescription,
-} from "../components/Interface/IProduct";
+} from "../../components/Interface/IProduct";
 
 const ProductDetailPage = (props: any) => {
   const path = props.match.params.name;

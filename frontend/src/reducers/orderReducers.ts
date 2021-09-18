@@ -12,7 +12,7 @@ import {
   REMOVE_ITEM_FAIL,
   REMOVE_ITEM_REQUEST,
   REMOVE_ITEM_SUCCESS,
-} from "../constants/orderConstants";
+} from "../ActionTypes/order";
 
 export const activeOrderReducer = (
   state = {},
