@@ -9,7 +9,10 @@ export const createOrder = asyncHandler(async (req, res) => {
   const store = await StoreSchema.findOne({ storeName });
   const user = req.user;
 
-  const orderExists = await Order.findOne({ user, status: "I" });
+  const orderExists = await Order.findOne({
+    user,
+    status: { $in: ["I", "L"] },
+  });
 
   if (orderExists) {
     throw new Error("Active order exists");
@@ -51,7 +54,10 @@ export const createOrder = asyncHandler(async (req, res) => {
 
 export const getActiveOrder = asyncHandler(async (req, res) => {
   const user = req.user;
-  const order = await Order.findOne({ user, status: "I" }).populate({
+  const order = await Order.findOne({
+    user,
+    status: { $in: ["I", "L"] },
+  }).populate({
     path: "orderItems",
     populate: {
       path: "product",

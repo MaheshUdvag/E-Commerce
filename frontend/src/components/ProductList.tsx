@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   },
   categoryTitle: {
     paddingBottom: 16,
-
     float: "left",
   },
   title: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   categoryImage: {
     display: "block",
-    width: "68vw",
+    width: "100%",
     height: 300,
     imageRendering: "pixelated",
     marginBottom: 15,
@@ -33,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       float: "right",
     },
-    marginBottom: 20,
+    margin: "0px 0px 20px 20px",
   },
 }));
 
@@ -108,11 +107,11 @@ const ProductList = (props: any) => {
             </TextField>
           ) : null}
 
-          <Grid container alignItems="center" spacing={6}>
+          <Grid container alignItems="center" spacing={3}>
             {products
               ? products.map((product: IProduct) => {
                   return (
-                    <Grid key={product._id} item xs={12} sm={5} lg={3} md={4}>
+                    <Grid key={product._id} item xs={12} sm={6} lg={3} md={4}>
                       <Product product={product} />
                     </Grid>
                   );

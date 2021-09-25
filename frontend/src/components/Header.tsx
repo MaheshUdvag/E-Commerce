@@ -12,6 +12,10 @@ import {
   Menu,
   Button,
   useMediaQuery,
+  PopperPlacementType,
+  Popper,
+  Fade,
+  Paper,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "@material-ui/core/styles";
@@ -43,14 +47,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       marginLeft: 120,
     },
+    display: "flex",
   },
   toolBar: {
     backgroundColor: "white",
     height: 45,
     minHeight: 10,
-    [theme.breakpoints.down("sm")]: {
-      display: "none",
-    },
   },
   category: {
     padding: 5,
@@ -77,9 +79,11 @@ const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+  const [open, setOpen] = useState(false);
+  const [placement, setPlacement] = useState<PopperPlacementType>();
 
   const handleMenu = (event: any) => {
-    setAnchorEl(event.currentTarget);
+    // setAnchorEl(event.currentTarget);
   };
 
   const logOut = () => {
@@ -104,6 +108,20 @@ const Header = () => {
   useEffect(() => {
     dispatch(listCategories());
   }, [dispatch]);
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: string
+  ) => {
+    if (anchorEl !== event.currentTarget) {
+      setAnchorEl(event.currentTarget);
+      setSelectedCategory(id);
+      setPlacement("bottom");
+    } else {
+      setAnchorEl(null);
+      setSelectedCategory(null);
+    }
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -132,25 +150,6 @@ const Header = () => {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  className={classes.menu}
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={profile}>Profile</MenuItem>
-                  <MenuItem onClick={logOut}>Logout</MenuItem>
-                </Menu>
               </div>
             ) : (
               <div>
@@ -171,28 +170,6 @@ const Header = () => {
                 >
                   {authenticated ? user.name.toUpperCase() : "SIGN IN"}
                 </Button>
-
-                {user ? (
-                  <Menu
-                    id="menu-appbar"
-                    className={classes.menu}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={profile}>Profile</MenuItem>
-                    <MenuItem onClick={logOut}>Logout</MenuItem>
-                  </Menu>
-                ) : null}
               </div>
             )}
           </Toolbar>
@@ -200,59 +177,48 @@ const Header = () => {
             <div className={classes.topCategories}>
               {categories
                 ? categories.map((category: ICategory) => (
-                    <React.Fragment key={category._id}>
-                      <div style={{ display: "inline-block" }}>
-                        <Button
-                          className={classes.category}
-                          color="primary"
-                          onClick={(event) => {
-                            setAnchorCategoryMenu(null);
-                            setSelectedCategory(null);
-                            setAnchorCategoryMenu(event.currentTarget);
-                            setSelectedCategory(category._id);
-                          }}
-                        >
-                          {category.name.toUpperCase()}
-                        </Button>
-                      </div>
-                      {category.subCategories ? (
-                        <Menu
-                          className={classes.menu}
-                          id="menu-appbar"
-                          anchorEl={anchorCategoryMenu}
-                          anchorOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                          keepMounted
-                          transformOrigin={{
-                            vertical: "top",
-                            horizontal: "right",
-                          }}
-                          open={Boolean(selectedCategory === category._id)}
-                          onClose={() => {
-                            setAnchorCategoryMenu(null);
-                            setSelectedCategory(null);
-                          }}
-                        >
-                          {category.subCategories.map((subCategory) => (
-                            <MenuItem
-                              key={subCategory._id}
-                              className={classes.menuitem}
-                              onClick={() => {
-                                setAnchorCategoryMenu(null);
-                                setSelectedCategory(null);
-                                history.push({
-                                  pathname: `/category/${subCategory.path}`,
-                                });
-                              }}
-                            >
-                              {subCategory.name}
-                            </MenuItem>
-                          ))}
-                        </Menu>
-                      ) : null}
-                    </React.Fragment>
+                    <div
+                      key={category._id}
+                      onClick={(event: any) => {
+                        handleClick(event, category._id);
+                      }}
+                    >
+                      <Button className={classes.category} color="primary">
+                        {category.name.toUpperCase()}
+                      </Button>
+                      <Popper
+                        open={selectedCategory === category._id}
+                        id={category._id}
+                        anchorEl={anchorEl}
+                        placement={placement}
+                        transition
+                        style={{
+                          marginTop: 5,
+                          backgroundColor: "#232f3e",
+                          maxWidth: 170,
+                          borderRadius: 5,
+                        }}
+                      >
+                        {category.subCategories.map((subCategory) => (
+                          <Button
+                            color="secondary"
+                            id="a"
+                            key={subCategory._id}
+                            onClick={() => {
+                              setSelectedCategory(null);
+                              setAnchorEl(null);
+                              history.push({
+                                pathname: `/category/${subCategory.path}`,
+                              });
+                            }}
+                            fullWidth={true}
+                            style={{ padding: "10px", minWidth: 170 }}
+                          >
+                            {subCategory.name}
+                          </Button>
+                        ))}
+                      </Popper>
+                    </div>
                   ))
                 : null}
             </div>

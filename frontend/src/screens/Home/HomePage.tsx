@@ -1,4 +1,4 @@
-import Carousel from "../../components/carousel";
+import MyCarousel from "../../components/MyCarousel";
 import ProductList from "../../components/ProductList";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +21,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Carousel />
+      <MyCarousel />
       <ProductList
         products={products}
         loading={loading}
