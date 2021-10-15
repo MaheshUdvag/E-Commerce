@@ -4,17 +4,15 @@ import BookmarkIcon from "@material-ui/icons/Bookmark";
 import CartIcon from "@material-ui/icons/ShoppingCart";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import {
-  createOrderAction,
-  removeItemFromCart,
-  updateCart,
-} from "../actions/orderActions";
+import { createOrderAction } from "../actions/orderActions";
 import { IProduct } from "./Interface/IProduct";
 import { IOrderItems } from "./Interface/IOrder";
 import useActiveOrder from "../hooks/useActiveOrder";
 import { guestUser } from "../actions/userActions";
 import useUserLogin from "../hooks/useUserLogin";
-import { Alert } from "@material-ui/lab";
+import { Alert, Color } from "@material-ui/lab";
+import { ACTIVE_ORDER_SUCCESS } from "../ActionTypes/order";
+import { addUpdateItem, removeItem } from "../apis/orderApis";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -31,10 +29,12 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [orderItem, setOrderItem] = useState<IOrderItems | null>();
-  const { order } = useActiveOrder();
+  const { order, error } = useActiveOrder();
   const { user } = useUserLogin();
   const [inCart, setInCart] = useState(false);
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [severity, setSeverity] = useState<Color | undefined>("success");
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -44,7 +44,13 @@ const ProductButton = ({ product }: { product: IProduct }) => {
     setOpen(false);
   };
 
-  const handleClick = () => {
+  const showMessage = (message: any, type?: any) => {
+    if (error) {
+      setMessage(error);
+    } else {
+      setMessage(message);
+    }
+    setSeverity(type || "success");
     setOpen(true);
   };
 
@@ -54,8 +60,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
       if (orderItem) {
         quantity += orderItem.quantity;
       }
-      await dispatch(updateCart(order._id, product._id, quantity));
-      handleClick();
+      updateQuantity(order._id, product._id, quantity, user.token);
     } else {
       if (!user) {
         await dispatch(guestUser());
@@ -64,14 +69,43 @@ const ProductButton = ({ product }: { product: IProduct }) => {
     }
   };
 
+  const updateQuantity = async (
+    order: any,
+    product: any,
+    quantity: any,
+    token: any
+  ) => {
+    let response;
+    let emptyCart = false;
+    if (quantity) {
+      response = await addUpdateItem(order, product, quantity, token);
+    } else {
+      emptyCart = true;
+      response = await removeItem(order, product, token);
+    }
+
+    if (response.status === 200 || response.status === 201) {
+      showMessage("Updated cart successfully", "success");
+      if (emptyCart) {
+        dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: {} });
+      } else {
+        dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: response.data });
+      }
+
+      console.log(response);
+    } else {
+      showMessage("Error occured while updating cart", "error");
+    }
+  };
+
   const removeFromCart = async () => {
     if (orderItem) {
       let quantity = orderItem.quantity;
       quantity -= 1;
       if (quantity <= 0) {
-        dispatch(removeItemFromCart(order._id, product._id));
+        updateQuantity(order._id, product._id, 0, user.token);
       } else {
-        dispatch(updateCart(order._id, product._id, quantity));
+        updateQuantity(order._id, product._id, quantity, user.token);
       }
     }
   };
@@ -142,9 +176,9 @@ const ProductButton = ({ product }: { product: IProduct }) => {
         Save to wish list
       </Button>
 
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity}>
+          {message}
         </Alert>
       </Snackbar>
     </div>

@@ -7,13 +7,17 @@ import {
   Button,
   useMediaQuery,
   useTheme,
+  Snackbar,
 } from "@material-ui/core";
 import { Image } from "cloudinary-react";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { removeItemFromCart, updateCart } from "../actions/orderActions";
+import { getActiveOrder, updateCart } from "../actions/orderActions";
 import { useDispatch } from "react-redux";
 import { IOrder } from "./Interface/IOrder";
 import { useHistory } from "react-router";
+import useUserLogin from "../hooks/useUserLogin";
+import { addUpdateItem, removeItem } from "../apis/orderApis";
+import { Alert, Color } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   cartItems: {
@@ -70,10 +74,20 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
   const classes = useStyles();
   const orderId = order._id;
   const [errors, setErrors] = useState<string[]>([]);
-
+  const {
+    user: { token },
+  } = useUserLogin();
   const dispatch = useDispatch();
-  const removeItem = (productId: string) => {
-    dispatch(removeItemFromCart(orderId, productId));
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [severity, setSeverity] = useState<Color | undefined>("success");
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const updateProduct = (
@@ -85,7 +99,7 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
     if (targetValue.match(numbers)) {
       const quantity: number = parseInt(targetValue);
       if (quantity > 0 && quantity <= 10) {
-        dispatch(updateCart(orderId, event.target.id, quantity));
+        updateQuantity(orderId, event.target.id, quantity);
         const displayError = errors.filter(
           (error) => error !== event.target.id
         );
@@ -99,8 +113,43 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
         setErrors([...errors, event.target.id]);
       }
     } else {
-      event.target.value = currentQuantity.toString();
+      // event.target.value = currentQuantity.toString();
       // setErrors([...errors, event.target.id]);
+    }
+  };
+
+  const showMessage = (message: any, type?: any) => {
+    // if (error) {
+    //   setMessage(error);
+    // } else {
+    setMessage(message);
+    // }
+    setSeverity(type || "success");
+    setOpen(true);
+  };
+
+  const updateQuantity = async (order: any, product: any, quantity: any) => {
+    let response;
+    let remove = false;
+    if (quantity) {
+      response = await addUpdateItem(order, product, quantity, token);
+    } else {
+      remove = true;
+      response = await removeItem(order, product, token);
+    }
+
+    if (response?.status === 200 || response?.status === 201) {
+      showMessage("Updated cart successfully", "success");
+      if (remove) {
+        console.log("s");
+        dispatch(getActiveOrder());
+      } else {
+        dispatch(updateCart(response.data));
+      }
+
+      console.log(response);
+    } else {
+      showMessage("Error occured while updating cart", "error");
     }
   };
 
@@ -249,7 +298,9 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
                     id={orderItem.product._id}
                     variant="contained"
                     className={classes.button}
-                    onClick={() => removeItem(orderItem.product._id)}
+                    onClick={() =>
+                      updateQuantity(order._id, orderItem.product._id, 0)
+                    }
                   >
                     <DeleteIcon />
                   </Button>
@@ -258,6 +309,11 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
             </Grid>
           ))
         : null}
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

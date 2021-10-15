@@ -8,14 +8,10 @@ import {
   Toolbar,
   Typography,
   IconButton,
-  MenuItem,
-  Menu,
   Button,
   useMediaQuery,
   PopperPlacementType,
   Popper,
-  Fade,
-  Paper,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "@material-ui/core/styles";
@@ -75,11 +71,9 @@ const Header = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<any>(null);
-  const [anchorCategoryMenu, setAnchorCategoryMenu] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
-  const [open, setOpen] = useState(false);
   const [placement, setPlacement] = useState<PopperPlacementType>();
 
   const handleMenu = (event: any) => {
