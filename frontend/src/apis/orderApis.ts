@@ -11,6 +11,20 @@ export const activeOrder = (token: string) => {
   });
 };
 
+export const completedOrder = (token: string, orderId: string) => {
+  return axios({
+    method: "POST",
+    url: "/api/orders/completed",
+    data: {
+      orderId,
+    },
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
 export const addUpdateItem = (
   orderId: string,
   productId: string,

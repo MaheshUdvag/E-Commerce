@@ -6,6 +6,7 @@ import {
 import {
   createOrder,
   getActiveOrder,
+  getCompletedOrder,
 } from "../../controllers/orderController.js";
 import {
   approvePayPalOrder,
@@ -19,6 +20,7 @@ const router = Router();
 
 router.post("/", authenticate, createOrder);
 router.get("/active", authenticate, getActiveOrder);
+router.post("/completed", authenticate, getCompletedOrder);
 router.post("/cart", authenticate, addUpdateItemToCart);
 router.delete("/cart", authenticate, removeItemFromCart);
 router.post("/paypal/create", authenticate, createPayPalOrder);

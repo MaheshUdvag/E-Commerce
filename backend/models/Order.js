@@ -17,7 +17,7 @@ const OrderSchema = new Schema(
       type: String,
       required: true,
     },
-    address: [AddressSchema],
+    address: AddressSchema,
     orderItems: [OrderItemSchema],
     payment: PaymentSchema,
   },

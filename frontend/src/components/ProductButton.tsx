@@ -91,8 +91,6 @@ const ProductButton = ({ product }: { product: IProduct }) => {
       } else {
         dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: response.data });
       }
-
-      console.log(response);
     } else {
       showMessage("Error occured while updating cart", "error");
     }

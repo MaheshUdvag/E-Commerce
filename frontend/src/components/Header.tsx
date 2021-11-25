@@ -71,13 +71,21 @@ const Header = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState<any>(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState<any>(null);
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
   const [placement, setPlacement] = useState<PopperPlacementType>();
 
   const handleMenu = (event: any) => {
-    // setAnchorEl(event.currentTarget);
+    if (menuAnchorEl === null) {
+      setMenuAnchorEl(event.currentTarget);
+      setOpenUserMenu(true);
+    } else {
+      setOpenUserMenu(false);
+      setMenuAnchorEl(null);
+    }
   };
 
   const logOut = () => {
@@ -166,6 +174,45 @@ const Header = () => {
                 </Button>
               </div>
             )}
+            <Popper
+              open={openUserMenu}
+              id={user?.name}
+              anchorEl={menuAnchorEl}
+              placement={placement}
+              transition
+              style={{
+                marginTop: 5,
+                backgroundColor: "#232f3e",
+                maxWidth: 170,
+                borderRadius: 5,
+                zIndex: 10000,
+              }}
+            >
+              <Button
+                color="secondary"
+                onClick={() => {
+                  setMenuAnchorEl(null);
+                  setOpenUserMenu(false);
+                  profile();
+                }}
+                fullWidth={true}
+                style={{ padding: "10px", minWidth: 170 }}
+              >
+                Profile
+              </Button>
+              <Button
+                color="secondary"
+                onClick={() => {
+                  setMenuAnchorEl(null);
+                  setOpenUserMenu(false);
+                  logOut();
+                }}
+                fullWidth={true}
+                style={{ padding: "10px", minWidth: 170 }}
+              >
+                Logout
+              </Button>
+            </Popper>
           </Toolbar>
           <Toolbar className={classes.toolBar}>
             <div className={classes.topCategories}>

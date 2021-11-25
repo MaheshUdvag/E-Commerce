@@ -1,4 +1,5 @@
 import { IProduct } from "./IProduct";
+import { IAddress } from "./IUser";
 
 export interface IOrder {
   _id: string;
@@ -9,10 +10,19 @@ export interface IOrder {
   store: string;
   status: string;
   orderItems: IOrderItems[];
-  address: [];
+  address: IAddress;
   createdAt: Date;
   updatedAt: Date;
+  payment?: IPayment;
   __v: Number;
+}
+
+export interface IPayment {
+  payerId: string;
+  paymentId: string;
+  paymentType: string;
+  status: string;
+  _id: string;
 }
 
 export interface IOrderItems {

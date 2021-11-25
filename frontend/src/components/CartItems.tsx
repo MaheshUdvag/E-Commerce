@@ -141,13 +141,10 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
     if (response?.status === 200 || response?.status === 201) {
       showMessage("Updated cart successfully", "success");
       if (remove) {
-        console.log("s");
         dispatch(getActiveOrder());
       } else {
         dispatch(updateCart(response.data));
       }
-
-      console.log(response);
     } else {
       showMessage("Error occured while updating cart", "error");
     }

@@ -50,7 +50,10 @@ const PayPal: React.FC<IPayPal> = ({ order, token, shippingAddress }) => {
 
               actions.reject();
             }
-            history.push("/orderSummary");
+            history.push({
+              pathname: "/orderSummary",
+              state: { orderId: order._id, token },
+            });
             console.log("success " + response.data.status);
           },
           onShippingChange: async (data: any, actions: any) => {

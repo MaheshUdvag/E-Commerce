@@ -42,6 +42,7 @@ export const createPayPalOrder = asyncHandler(async (req, res) => {
     throw new Error("Order not Found");
   }
 
+  currentOrder.address = address;
   const items = currentOrder.orderItems.map((item) => {
     return {
       name: item.product.name,
@@ -57,6 +58,9 @@ export const createPayPalOrder = asyncHandler(async (req, res) => {
     };
   });
 
+  const full_name = `${address?.firstName ? address?.firstName : ""}  ${
+    address.lastName
+  }`.trim();
   const request = new paypal.orders.OrdersCreateRequest();
   request.prefer("return=representation");
   request.requestBody({
@@ -87,7 +91,7 @@ export const createPayPalOrder = asyncHandler(async (req, res) => {
         description: "test payment",
         shipping: {
           name: {
-            full_name: `${address?.firstName}  ${address.lastName}`,
+            full_name,
           },
           type: "SHIPPING",
           address: {
@@ -126,7 +130,6 @@ export const updateOrderShippingAddress = asyncHandler(async (req, res) => {
   const client = getClient();
   const currentOrder = await Order.findById(orderId);
   const user = await UserSchema.findById(req.user._id);
-  const email = user.email;
 
   try {
     const request = new paypal.orders.OrdersGetRequest(payPalOrderId);
@@ -140,7 +143,7 @@ export const updateOrderShippingAddress = asyncHandler(async (req, res) => {
       postal_code: zipcode,
     } = result.purchase_units[0].shipping.address;
     const lastName = result.purchase_units[0].shipping.name.full_name;
-
+    const { phone, isPrimary } = currentOrder.address;
     const address = {
       lastName,
       street1,
@@ -149,8 +152,8 @@ export const updateOrderShippingAddress = asyncHandler(async (req, res) => {
       state,
       country,
       zipcode,
-      addressType: "S",
-      isPrimary: 1,
+      phone,
+      isPrimary,
     };
 
     /**
@@ -176,7 +179,6 @@ export const updateOrderShippingAddress = asyncHandler(async (req, res) => {
 
     res.send({ addressUpdate: true });
   } catch (err) {
-    console.log(err);
     res.send({ addressUpdate: false });
   }
 });
@@ -187,7 +189,6 @@ export const approvePayPalOrder = asyncHandler(async (req, res) => {
   const request = new paypal.orders.OrdersCaptureRequest(payPalOrderId);
   request.requestBody({});
   const response = await client.execute(request);
-  console.log(response.result.purchase_units.payments);
   const currentOrder = await Order.findById(orderId);
   currentOrder.payment = {
     paymentId: payPalOrderId,

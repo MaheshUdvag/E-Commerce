@@ -25,16 +25,17 @@ const useStyles = makeStyles((theme) => ({
   button: { margin: 3 },
   paper: {
     [theme.breakpoints.up("md")]: {
-      height: "22vh",
+      height: "19vh",
     },
-
+    width: "200px",
     padding: 15,
   },
   paperSelected: {
     [theme.breakpoints.up("md")]: {
-      height: "22vh",
+      height: "19vh",
     },
     border: "3px solid #232f3e",
+    width: "12vw",
     padding: 15,
   },
 }));
@@ -116,26 +117,25 @@ const AddressCard: React.FC<Props> = ({
             {address?.street2 && ", " + address?.street2}
           </Typography>
           <Typography variant="subtitle2">
-            {address?.area}
-            {address?.city && ", " + address?.city}
-          </Typography>
-          <Typography variant="subtitle2">
-            {address?.state}
+            {address?.city}
+            {address?.state && ", " + address?.state}
             {address?.country && ", " + address?.country}
           </Typography>
           <Typography variant="subtitle2">{address?.zipcode}</Typography>
           <Typography variant="subtitle2">{address?.phone}</Typography>
           {page !== "payment" && (
             <>
-              <Button
-                size="small"
-                color="primary"
-                className={classes.button}
-                variant="contained"
-                onClick={() => editAddress(address)}
-              >
-                Edit
-              </Button>
+              {page !== "summary" && (
+                <Button
+                  size="small"
+                  color="primary"
+                  className={classes.button}
+                  variant="contained"
+                  onClick={() => editAddress(address)}
+                >
+                  Edit
+                </Button>
+              )}
               {address?.isPrimary !== "1" && page !== "checkout" && (
                 <>
                   <Button
@@ -168,7 +168,7 @@ const AddressCard: React.FC<Props> = ({
           direction="column"
           alignItems="center"
           justifyContent="center"
-          style={{ height: "20vh" }}
+          style={{ height: "18vh" }}
         >
           <Grid item>
             <Typography>

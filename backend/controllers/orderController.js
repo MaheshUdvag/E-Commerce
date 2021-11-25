@@ -71,3 +71,26 @@ export const getActiveOrder = asyncHandler(async (req, res) => {
     throw new Error("No Active orders");
   }
 });
+
+export const getCompletedOrder = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { orderId } = req.body;
+
+  const order = await Order.findById(orderId).populate({
+    path: "orderItems",
+    populate: {
+      path: "product",
+      model: "product",
+    },
+  });
+
+  if (order.status === "S" && order.user.toString() === user._id.toString()) {
+    if (order) {
+      res.send(order);
+    }
+  } else {
+    throw new Error(
+      "The given order id is either not completed or not associated with this user"
+    );
+  }
+});

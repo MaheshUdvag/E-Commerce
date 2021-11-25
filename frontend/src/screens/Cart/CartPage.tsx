@@ -1,4 +1,4 @@
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Typography } from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getActiveOrder } from "../../actions/orderActions";
@@ -19,6 +19,11 @@ const CartPage = () => {
     <Container>
       {order && Object.keys(order).length > 0 && !error ? (
         <Grid container spacing={5}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Typography component="h4" variant="h4">
+              Your Cart
+            </Typography>
+          </Grid>
           <Grid item lg={9} md={12} sm={12} xs={12}>
             <CartItems order={order} />
           </Grid>

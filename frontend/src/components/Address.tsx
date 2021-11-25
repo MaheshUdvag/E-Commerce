@@ -38,7 +38,6 @@ interface Validate {
   lastName: string;
   street1: string;
   street2: string;
-  area: string;
   city: string;
   state: string;
   country: string;
@@ -192,18 +191,7 @@ const Address = (props: any) => {
                 className={classes.input}
               />
             </Grid>
-            <Grid item lg={6} md={6} sm={6} xs={12}>
-              <Field
-                id="area-input"
-                name="area"
-                label="area"
-                type="text"
-                autoComplete="on"
-                required={true}
-                component={renderInput}
-                className={classes.input}
-              />
-            </Grid>
+
             <Grid item lg={6} md={6} sm={6} xs={12}>
               <Field
                 id="city-input"
@@ -285,7 +273,6 @@ const validate = (values: any) => {
     lastName: "",
     street1: "",
     street2: "",
-    area: "",
     city: "",
     state: "",
     country: "",
@@ -296,7 +283,6 @@ const validate = (values: any) => {
   const requiredFields = [
     "lastName",
     "street1",
-    "area",
     "city",
     "state",
     "country",
