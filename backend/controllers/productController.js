@@ -151,23 +151,20 @@ export const addProduct = asyncHandler(async (req, res) => {
 
 export const updateProduct = asyncHandler(async (req, res) => {
   const sku = req.params.sku;
-  const listPrice = req.body.listPrice;
-  const offerPrice = req.body.offerPrice;
-  const currency = req.body.currency;
-  const price = {
-    listPrice,
-    offerPrice,
-    currency,
-  };
+  // const listPrice = req.body.listPrice;
+  // const offerPrice = req.body.offerPrice;
+  // const currency = req.body.currency;
+  // const price = {
+  //   listPrice,
+  //   offerPrice,
+  //   currency,
+  // };
 
   const product = await Product.updateOne(
     { sku: sku },
     {
       $set: {
-        lastUpdate: new Date(),
-        price: price,
         attributes: req.body.attributes,
-        attachments: req.body.attachments,
       },
     }
   );

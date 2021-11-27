@@ -74,6 +74,7 @@ const LoginPage = (props: any) => {
   const { error, authenticated } = useUserLogin();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (authenticated) {
       history.push("/");
     }

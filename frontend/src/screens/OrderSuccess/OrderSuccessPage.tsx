@@ -13,6 +13,7 @@ const OrderSuccessPage: React.FC<any> = (props) => {
   const history = useHistory();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const orderResponse = async () => {
       const { data } = await completedOrder(token, orderId);
       setOrder(data);

@@ -55,6 +55,7 @@ const ProfilePage = (props: any) => {
     if (!profile) {
       dispatch(getUser());
     }
+    window.scrollTo(0, 0);
   }, [dispatch, history, profile]);
 
   return (

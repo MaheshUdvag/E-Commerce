@@ -41,6 +41,7 @@ const ProductDetailPage = (props: any) => {
 
   useEffect(() => {
     dispatch(getProductDetailsByPath(path));
+    window.scrollTo(0, 0);
   }, [path, dispatch]);
 
   return (

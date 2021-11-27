@@ -15,6 +15,7 @@ const CategoryPage = (props: any) => {
 
   useEffect(() => {
     dispatch(listProductsByCategory(categoryPath, 10));
+    window.scrollTo(0, 0);
   }, [categoryPath, dispatch]);
 
   return (

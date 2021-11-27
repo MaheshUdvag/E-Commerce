@@ -13,6 +13,7 @@ const CartPage = () => {
 
   useEffect(() => {
     dispatch(getActiveOrder());
+    window.scrollTo(0, 0);
   }, [dispatch]);
 
   return (

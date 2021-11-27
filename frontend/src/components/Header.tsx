@@ -12,6 +12,7 @@ import {
   useMediaQuery,
   PopperPlacementType,
   Popper,
+  ClickAwayListener,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "@material-ui/core/styles";
@@ -75,7 +76,7 @@ const Header = () => {
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.up("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [placement, setPlacement] = useState<PopperPlacementType>();
 
   const handleMenu = (event: any) => {
@@ -90,12 +91,10 @@ const Header = () => {
 
   const logOut = () => {
     dispatch(logoutUser());
-    handleClose();
     history.push("/");
   };
 
   const profile = () => {
-    handleClose();
     history.push("/profile");
   };
 
@@ -125,10 +124,6 @@ const Header = () => {
     }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <>
       <div className={classes.root}>
@@ -141,7 +136,7 @@ const Header = () => {
             >
               COMMERCE
             </Typography>
-            {!isMobile ? (
+            {isMobile ? (
               <div>
                 <IconButton
                   aria-label="account of current user"
@@ -188,30 +183,48 @@ const Header = () => {
                 zIndex: 10000,
               }}
             >
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setMenuAnchorEl(null);
-                  setOpenUserMenu(false);
-                  profile();
-                }}
-                fullWidth={true}
-                style={{ padding: "10px", minWidth: 170 }}
-              >
-                Profile
-              </Button>
-              <Button
-                color="secondary"
-                onClick={() => {
-                  setMenuAnchorEl(null);
-                  setOpenUserMenu(false);
-                  logOut();
-                }}
-                fullWidth={true}
-                style={{ padding: "10px", minWidth: 170 }}
-              >
-                Logout
-              </Button>
+              <ClickAwayListener onClickAway={(event) => handleMenu(event)}>
+                <span>
+                  {isMobile === true && (
+                    <Button
+                      color="secondary"
+                      fullWidth={true}
+                      style={{ padding: "10px", minWidth: 170 }}
+                      onClick={() => {
+                        setMenuAnchorEl(null);
+                        setOpenUserMenu(false);
+                        history.push("/cart");
+                      }}
+                    >
+                      CART
+                    </Button>
+                  )}
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setMenuAnchorEl(null);
+                      setOpenUserMenu(false);
+                      profile();
+                    }}
+                    fullWidth={true}
+                    style={{ padding: "10px", minWidth: 170 }}
+                  >
+                    Profile
+                  </Button>
+                  <Button
+                    color="secondary"
+                    onClick={() => {
+                      setMenuAnchorEl(null);
+                      setOpenUserMenu(false);
+                      logOut();
+                    }}
+                    fullWidth={true}
+                    style={{ padding: "10px", minWidth: 170 }}
+                  >
+                    Logout
+                  </Button>
+                </span>
+              </ClickAwayListener>
             </Popper>
           </Toolbar>
           <Toolbar className={classes.toolBar}>
@@ -240,24 +253,31 @@ const Header = () => {
                           borderRadius: 5,
                         }}
                       >
-                        {category.subCategories.map((subCategory) => (
-                          <Button
-                            color="secondary"
-                            id="a"
-                            key={subCategory._id}
-                            onClick={() => {
-                              setSelectedCategory(null);
-                              setAnchorEl(null);
-                              history.push({
-                                pathname: `/category/${subCategory.path}`,
-                              });
-                            }}
-                            fullWidth={true}
-                            style={{ padding: "10px", minWidth: 170 }}
-                          >
-                            {subCategory.name}
-                          </Button>
-                        ))}
+                        <ClickAwayListener
+                          onClickAway={() => {
+                            setSelectedCategory(null);
+                            setAnchorEl(null);
+                          }}
+                        >
+                          <span>
+                            {category.subCategories.map((subCategory) => (
+                              <Button
+                                color="secondary"
+                                id="a"
+                                key={subCategory._id}
+                                onClick={() => {
+                                  history.push({
+                                    pathname: `/category/${subCategory.path}`,
+                                  });
+                                }}
+                                fullWidth={true}
+                                style={{ padding: "10px", minWidth: 170 }}
+                              >
+                                {subCategory.name}
+                              </Button>
+                            ))}
+                          </span>
+                        </ClickAwayListener>
                       </Popper>
                     </div>
                   ))
