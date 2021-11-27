@@ -14,13 +14,18 @@ export const getProducts = (count: number) => {
   });
 };
 
-export const getProductsByCategory = (path: string, count: number) => {
+export const getProductsByCategory = (
+  path: string,
+  count: number,
+  sortBy: number
+) => {
   return axios({
     method: "GET",
     url: "/admin/api/products/byCategory",
     params: {
       path,
       count,
+      sortBy,
       storeName: "MaheshCommerce",
     },
     headers: {

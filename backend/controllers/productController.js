@@ -26,12 +26,34 @@ export const getProductsByCount = asyncHandler(async (req, res) => {
 });
 
 export const getProductsByCategory = asyncHandler(async (req, res) => {
-  const count = parseInt(req.query.count || 2);
+  const count = parseInt(req.query.count || 10);
+  const offset = parseInt(req.query.offset || 1);
   const path = req.query.path;
+  const sortBy = req.query.sortBy;
   const storeName = req.query.storeName;
 
+  let sortOption;
+
+  switch (sortBy) {
+    case "1":
+      sortOption = null;
+      break;
+    case "2":
+      sortOption = { "price.offerPrice": 1 };
+      break;
+    case "3":
+      sortOption = { "price.offerPrice": -1 };
+      break;
+    case "4":
+      sortOption = { name: 1 };
+      break;
+    default:
+      sortOption = null;
+      break;
+  }
+
   const store = await StoreSchema.findOne({ storeName: storeName });
-  const category = await CategorySchema.findOne({ path }).populate({
+  const category = await CategorySchema.findOne({ path, store }).populate({
     path: "products",
     populate: {
       path: "description",
@@ -39,6 +61,11 @@ export const getProductsByCategory = asyncHandler(async (req, res) => {
         path: "language",
         model: "language",
       },
+    },
+    options: {
+      ...(sortOption !== null && { sort: { ...sortOption } }),
+      skip: (offset - 1) * count,
+      limit: count * offset,
     },
   });
 

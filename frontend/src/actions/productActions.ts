@@ -31,10 +31,10 @@ export const listProducts = () => async (dispatch: any) => {
 };
 
 export const listProductsByCategory =
-  (path: string, count: number) => async (dispatch: any) => {
+  (path: string, count: number, sortBy: number) => async (dispatch: any) => {
     try {
       dispatch({ type: PRODUCT_LIST_BY_CATEGORY_REQUEST });
-      const { data } = await getProductsByCategory(path, count);
+      const { data } = await getProductsByCategory(path, count, sortBy);
       dispatch({
         type: PRODUCT_LIST_BY_CATEGORY_SUCCESS,
         payload: data.category,

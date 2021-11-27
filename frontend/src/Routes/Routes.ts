@@ -1,15 +1,6 @@
-import CategoryPage from "../screens/Category/CategoryPage";
-import HomePage from "../screens/Home/HomePage";
-import LoginPage from "../screens/Login/LoginPage";
-import RegisterPage from "../screens/Register/RegisterPage";
-import ProfilePage from "../screens/Profile/ProfilePage";
-import CartPage from "../screens/Cart/CartPage";
-import Address from "../components/Address";
-import ProductDetailPage from "../screens/PDP/ProductDetailPage";
+import { lazy } from "react";
 import PasswordReset from "../components/PasswordReset";
 import AddressBook from "../components/AddressBook";
-import CheckoutPage from "../screens/Checkout/CheckoutPage";
-import OrderSuccessPage from "../screens/OrderSuccess/OrderSuccessPage";
 
 export interface IRoute {
   path: string;
@@ -22,33 +13,33 @@ export interface IRoute {
 const routes: IRoute[] = [
   {
     path: "/",
-    component: HomePage,
+    component: lazy(() => import("../screens/Home/HomePage")),
     exact: true,
   },
   {
     path: "/category/:name",
-    component: CategoryPage,
+    component: lazy(() => import("../screens/Category/CategoryPage")),
     exact: true,
   },
   {
     path: "/login",
-    component: LoginPage,
+    component: lazy(() => import("../screens/Login/LoginPage")),
     exact: true,
   },
   {
     path: "/register",
-    component: RegisterPage,
+    component: lazy(() => import("../screens/Register/RegisterPage")),
     exact: true,
     type: "unAuthenticated",
   },
   {
     path: "/product/:name",
-    component: ProductDetailPage,
+    component: lazy(() => import("../screens/PDP/ProductDetailPage")),
     exact: true,
   },
   {
     path: "/profile",
-    component: ProfilePage,
+    component: lazy(() => import("../screens/Profile/ProfilePage")),
     routes: [
       {
         path: "/profile/change-password",
@@ -68,27 +59,27 @@ const routes: IRoute[] = [
   },
   {
     path: "/add-address",
-    component: Address,
+    component: lazy(() => import("../components/Address")),
     exact: true,
   },
   {
     path: "/update-address",
-    component: Address,
+    component: lazy(() => import("../components/Address")),
     exact: true,
   },
   {
     path: "/cart",
-    component: CartPage,
+    component: lazy(() => import("../screens/Cart/CartPage")),
     exact: true,
   },
   {
     path: "/checkout",
-    component: CheckoutPage,
+    component: lazy(() => import("../screens/Checkout/CheckoutPage")),
     exact: false,
   },
   {
     path: "/orderSummary",
-    component: OrderSuccessPage,
+    component: lazy(() => import("../screens/OrderSuccess/OrderSuccessPage")),
     exact: true,
   },
 ];

@@ -38,19 +38,19 @@ const useStyles = makeStyles((theme) => ({
 
 const options = [
   {
-    value: "0",
+    value: 1,
     label: "Relevance",
   },
   {
-    value: "1",
+    value: 2,
     label: "Price (low - high)",
   },
   {
-    value: "2",
+    value: 3,
     label: "Price (high - low)",
   },
   {
-    value: "4",
+    value: 4,
     label: "Name",
   },
 ];
@@ -60,11 +60,6 @@ const ProductList = (props: any) => {
   const products = props.products;
   const loading = props.loading;
   const page = props.page;
-  const [sortOptions, setSortOptions] = React.useState("EUR");
-
-  const handleChange = (event: any) => {
-    setSortOptions(event.target.value);
-  };
 
   return (
     <div>
@@ -90,8 +85,8 @@ const ProductList = (props: any) => {
               id="outlined-select-sortOptions-native"
               select
               label="Sort By"
-              value={sortOptions}
-              onChange={handleChange}
+              value={props.sortOptions}
+              onChange={props.handleSortChange}
               SelectProps={{
                 native: true,
               }}

@@ -13,8 +13,15 @@ const CategoryPage = (props: any) => {
   });
   const { category, loading } = productListByCategory;
 
+  const [sortOptions, setSortOptions] = React.useState(1);
+
+  const handleSortChange = (event: any) => {
+    setSortOptions(event.target.value);
+    dispatch(listProductsByCategory(categoryPath, 10, event.target.value));
+  };
+
   useEffect(() => {
-    dispatch(listProductsByCategory(categoryPath, 10));
+    dispatch(listProductsByCategory(categoryPath, 10, 1));
     window.scrollTo(0, 0);
   }, [categoryPath, dispatch]);
 
@@ -26,6 +33,8 @@ const CategoryPage = (props: any) => {
           title={category.name}
           categoryImage={category.description[0].categoryImage}
           page="category"
+          sortOptions={sortOptions}
+          handleSortChange={handleSortChange}
         />
       ) : loading ? (
         <>

@@ -39,7 +39,10 @@ const OrderSuccessPage: React.FC<any> = (props) => {
             type="submit"
             variant="contained"
             endIcon={<ArrowForwardIcon />}
-            onClick={() => history.push("/")}
+            onClick={() => {
+              history.replace("", null);
+              history.push("/");
+            }}
           >
             Continue Shopping
           </Button>
