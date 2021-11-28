@@ -1,8 +1,8 @@
-import { Skeleton } from "@material-ui/lab";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductsByCategory } from "../../actions/productActions";
 import Error from "../../components/Error";
+import PageSkeleton from "../../components/PageSkeleton";
 import ProductList from "../../components/ProductList";
 
 const CategoryPage = (props: any) => {
@@ -31,21 +31,16 @@ const CategoryPage = (props: any) => {
         <ProductList
           products={category.products}
           title={category.name}
+          loading={loading}
           categoryImage={category.description[0].categoryImage}
           page="category"
           sortOptions={sortOptions}
           handleSortChange={handleSortChange}
         />
-      ) : loading ? (
-        <>
-          <Skeleton variant="rect" width={1010} height={218} />
-          <Skeleton variant="rect" width={210} height={418} />
-          <Skeleton variant="text" width={210} height={40} />
-          <Skeleton variant="text" width={210} height={40} />
-        </>
       ) : (
-        <Error />
+        <PageSkeleton />
       )}
+      {!category && <Error />}
     </>
   );
 };

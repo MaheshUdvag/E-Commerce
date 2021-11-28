@@ -10,6 +10,7 @@ import routes from "./Routes/Routes";
 import RouteUtils from "./Routes/RouteUtils";
 import useUserLogin from "./hooks/useUserLogin";
 import { Suspense } from "react";
+import PageSkeleton from "./components/PageSkeleton";
 
 const useStyles = makeStyles((theme) => ({
   app: {
@@ -24,7 +25,7 @@ const App = () => {
 
   return (
     <Router>
-      <Suspense fallback="...is loading">
+      <Suspense fallback={<PageSkeleton />}>
         <ThemeProvider theme={themes}>
           <Header />
           <div className={classes.app}>

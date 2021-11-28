@@ -3,8 +3,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Container, Grid, TextField } from "@material-ui/core";
 import Product from "./Product";
-import Error from "./Error";
 import { IProduct } from "./Interface/IProduct";
+import { Skeleton } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -114,10 +114,22 @@ const ProductList = (props: any) => {
               : null}
           </Grid>
         </Container>
-      ) : !loading ? (
-        <Error />
       ) : (
-        <></>
+        <Container className={classes.container}>
+          <Skeleton
+            className={classes.categoryTitle}
+            variant="rect"
+            width={200}
+            height={20}
+          />
+          <Grid container alignItems="center" spacing={3}>
+            {[1, 2, 3, 4].map((index) => (
+              <Grid key={index} item xs={12} sm={6} lg={3} md={4}>
+                <Skeleton variant="rect" width={250} height={350} />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
       )}
     </div>
   );
