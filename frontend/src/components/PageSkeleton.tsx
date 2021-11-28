@@ -26,7 +26,6 @@ const PageSkeleton = () => {
 
   return (
     <div>
-      <Skeleton className={classes.header} variant="rect" />
       <Skeleton className={classes.carouselImage} variant="rect" />
       <div className={classes.productCards}>
         {[1, 2, 3, 4].map((index) => (

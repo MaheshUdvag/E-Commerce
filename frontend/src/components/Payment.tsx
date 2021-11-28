@@ -8,6 +8,8 @@ import {
   Theme,
 } from "@material-ui/core";
 import React, { useState } from "react";
+import { useHistory } from "react-router";
+import { approveOrder } from "../apis/orderApis";
 import PayPal from "./PayPal";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,11 +22,27 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Payment: React.FC<any> = ({ order, token, shippingAddress }) => {
-  const [paymentType, setPaymentType] = useState();
+  const [paymentType, setPaymentType] = useState<string>("Cash On Delivery");
   const classes = useStyles();
+  const history = useHistory();
   const handleChange = (event: any) => {
     const name = event.target.value;
     setPaymentType(name);
+  };
+
+  const placeOrder = async () => {
+    console.log(paymentType);
+
+    if (paymentType !== "") {
+      const {
+        data: { status },
+      } = await approveOrder(order._id, paymentType, shippingAddress, token);
+      if (status === "COMPLETED")
+        history.push({
+          pathname: "/orderSummary",
+          state: { orderId: order._id, token },
+        });
+    }
   };
 
   return (
@@ -64,6 +82,7 @@ const Payment: React.FC<any> = ({ order, token, shippingAddress }) => {
               variant="contained"
               color="primary"
               className={classes.button}
+              onClick={placeOrder}
             >
               Place Order
             </Button>

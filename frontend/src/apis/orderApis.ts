@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IAddress } from "../components/Interface/IUser";
 
 export const activeOrder = (token: string) => {
   return axios({
@@ -136,6 +137,27 @@ export const approvePayPalOrder = (
     data: {
       payPalOrderId,
       orderId,
+    },
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
+export const approveOrder = (
+  orderId: string,
+  paymentType: string,
+  address: IAddress,
+  token: string
+) => {
+  return axios({
+    method: "POST",
+    url: "/api/orders/approveOrder",
+    data: {
+      paymentType,
+      orderId,
+      address,
     },
     headers: {
       "content-type": "application/json",

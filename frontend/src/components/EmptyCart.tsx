@@ -27,7 +27,7 @@ const EmptyCart = () => {
         <Image
           cloudName="dvvxjkifm"
           crop="scale"
-          width={isMobile && 300}
+          width={isMobile && 250}
           src="https://res.cloudinary.com/dvvxjkifm/image/upload/v1631170743/ECommerce/no_cart_nywvpb.png"
         />
       </Grid>

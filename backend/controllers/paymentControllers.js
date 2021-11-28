@@ -208,3 +208,24 @@ export const approvePayPalOrder = asyncHandler(async (req, res) => {
       throw err;
     });
 });
+
+export const approveOrder = asyncHandler(async (req, res) => {
+  const { orderId, paymentType, address } = req.body;
+
+  const currentOrder = await Order.findById(orderId);
+  currentOrder.payment = {
+    paymentId: orderId,
+    paymentType,
+    status: "COMPLETED",
+  };
+  currentOrder.address = address;
+  currentOrder.status = "S";
+  currentOrder
+    .save()
+    .then(() => {
+      res.send({ status: "COMPLETED" });
+    })
+    .catch((err) => {
+      throw err;
+    });
+});

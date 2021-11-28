@@ -9,6 +9,7 @@ import {
   getCompletedOrder,
 } from "../../controllers/orderController.js";
 import {
+  approveOrder,
   approvePayPalOrder,
   createPayPalOrder,
   updateOrderShippingAddress,
@@ -26,5 +27,5 @@ router.delete("/cart", authenticate, removeItemFromCart);
 router.post("/paypal/create", authenticate, createPayPalOrder);
 router.post("/paypal/updateAddress", authenticate, updateOrderShippingAddress);
 router.post("/paypal/approve", authenticate, approvePayPalOrder);
-
+router.post("/approveOrder", authenticate, approveOrder);
 export default router;
