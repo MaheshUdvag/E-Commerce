@@ -73,7 +73,7 @@ const ProductList = (props: any) => {
             />
           ) : null}
           <Typography
-            variant="h4"
+            variant="h5"
             className={
               page === "category" ? classes.categoryTitle : classes.title
             }

@@ -5,13 +5,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../../actions/productActions";
 import { HOME_PAGE_CONSTANTS } from "./HomePageConstants";
 import { useTranslation } from "react-i18next";
+import CategoryList from "../../components/CategoryList";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const productList = useSelector((state: any) => {
     return state.productListReducer;
   });
+  const categoryList = useSelector((state: any) => {
+    return state.categoryListReducer;
+  });
   const { loading, products } = productList;
+  const { loading: categoryLoad, categories } = categoryList;
+
   const { t } = useTranslation();
   const { LATEST_PRODUCTS, PAGE } = HOME_PAGE_CONSTANTS;
 
@@ -23,6 +29,7 @@ const HomePage = () => {
   return (
     <>
       <MyCarousel />
+      {categories && !categoryLoad && <CategoryList categories={categories} />}
       <ProductList
         products={products}
         loading={loading}

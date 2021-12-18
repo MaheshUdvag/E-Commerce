@@ -3,18 +3,26 @@ import Language from "../models/Language.js";
 import Product from "../models/Product.js";
 import StoreSchema from "../models/Store.js";
 import CategorySchema from "../models/Category.js";
+import { redis } from "../server.js";
 
 export const getProductsByCount = asyncHandler(async (req, res) => {
   const count = parseInt(req.query.count || 2);
-  const products = await Product.find({})
-    .populate({
-      path: "description",
-      populate: {
-        path: "language",
-        model: "language",
-      },
-    })
-    .limit(count);
+
+  const cacheKey = `products|${count}`;
+  let products = JSON.parse(await redis.get(cacheKey));
+
+  if (!products) {
+    products = await Product.find({})
+      .populate({
+        path: "description",
+        populate: {
+          path: "language",
+          model: "language",
+        },
+      })
+      .limit(count);
+    await redis.set(cacheKey, JSON.stringify(products));
+  }
 
   if (products) {
     const total = products.length;
@@ -29,8 +37,10 @@ export const getProductsByCategory = asyncHandler(async (req, res) => {
   const count = parseInt(req.query.count || 10);
   const offset = parseInt(req.query.offset || 1);
   const path = req.query.path;
-  const sortBy = req.query.sortBy;
-  const storeName = req.query.storeName;
+  const sortBy = req.query.sortBy ? req.query.sortBy : "";
+  const storeName = req.query.storeName
+    ? req.query.storeName
+    : "MaheshCommerce";
 
   let sortOption;
 
@@ -52,22 +62,28 @@ export const getProductsByCategory = asyncHandler(async (req, res) => {
       break;
   }
 
-  const store = await StoreSchema.findOne({ storeName: storeName });
-  const category = await CategorySchema.findOne({ path, store }).populate({
-    path: "products",
-    populate: {
-      path: "description",
+  const cacheKey = `${storeName}|${path}|${sortBy}|${offset}|${count}`;
+  let category = JSON.parse(await redis.get(cacheKey));
+
+  if (!category) {
+    const store = await StoreSchema.findOne({ storeName: storeName });
+    category = await CategorySchema.findOne({ path, store }).populate({
+      path: "products",
       populate: {
-        path: "language",
-        model: "language",
+        path: "description",
+        populate: {
+          path: "language",
+          model: "language",
+        },
       },
-    },
-    options: {
-      ...(sortOption !== null && { sort: { ...sortOption } }),
-      skip: (offset - 1) * count,
-      limit: count * offset,
-    },
-  });
+      options: {
+        ...(sortOption !== null && { sort: { ...sortOption } }),
+        skip: (offset - 1) * count,
+        limit: count * offset,
+      },
+    });
+    await redis.set(cacheKey, JSON.stringify(category));
+  }
 
   if (category) {
     const total = category.products.length;

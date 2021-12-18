@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, useMediaQuery } from "@material-ui/core";
 import ProductDetail from "../../components/ProductDetail";
 import ProductImage from "../../components/ProductImage";
 import { getProductDetailsByPath } from "../../actions/productActions";
@@ -10,10 +10,12 @@ import {
   IProduct,
   IProductDescription,
 } from "../../components/Interface/IProduct";
+import ProductButton from "../../components/ProductButton";
 
 const ProductDetailPage = (props: any) => {
   const path = props.match.params.name;
   const history = useHistory();
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const dispatch = useDispatch();
   const getProductDetail = useSelector((state: any) => {
@@ -52,7 +54,8 @@ const ProductDetailPage = (props: any) => {
 
           <Grid container spacing={4}>
             <Grid item lg={4} md={6} sm={6} xs={12}>
-              <ProductImage product={product} description={description} />
+              <ProductImage description={description} />
+              {!isMobile && <ProductButton product={product} />}
             </Grid>
             <Grid item lg={8} md={6} sm={6} xs={12}>
               <ProductDetail product={product} description={description} />

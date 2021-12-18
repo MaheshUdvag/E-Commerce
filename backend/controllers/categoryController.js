@@ -1,10 +1,10 @@
 import asyncHandler from "express-async-handler";
-
 import LanguageSchema from "../models/Language.js";
 import ProductSchema from "../models/Product.js";
 import StoreSchema from "../models/Store.js";
 import CategorySchema from "../models/Category.js";
 import CatalogSchema from "../models/Catalog.js";
+import { redis } from "../server.js";
 
 export const getAllCategories = asyncHandler(async (req, res) => {
   const storeName = req.query.storeName;
@@ -13,11 +13,17 @@ export const getAllCategories = asyncHandler(async (req, res) => {
     store,
   });
 
-  const categories = await CategorySchema.find({
-    store,
-    subCategories: { $ne: null },
-    _id: { $in: catalog.categories },
-  }).populate("subCategories");
+  const cacheKey = `${store._id}|${catalog._id}|categories`;
+  let categories = JSON.parse(await redis.get(cacheKey));
+
+  if (!categories) {
+    categories = await CategorySchema.find({
+      store,
+      subCategories: { $ne: null },
+      _id: { $in: catalog.categories },
+    }).populate("subCategories");
+    await redis.set(cacheKey, JSON.stringify(categories));
+  }
 
   if (categories) {
     res.send({ categories });

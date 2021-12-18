@@ -5,10 +5,12 @@ export const invalidRequest = (err, req, res, next) => {
     process.env.NODE_ENV === "local"
       ? {
           message: err.message,
+          name: err.name,
           stack: err.stack,
         }
       : {
           message: err.message,
+          name: err.name,
         };
   res.send(response);
 };

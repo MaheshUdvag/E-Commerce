@@ -7,11 +7,14 @@ import CatalogRoutes from "./routes/administratorRoutes/catalog.js";
 import UserRoutes from "./routes/storeRoutes/user.js";
 import OrderRoutes from "./routes/storeRoutes/order.js";
 import { requestNotFound, invalidRequest } from "./middleware/errorHandler.js";
+import { RedisClient } from "./config/redis.js";
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+const redis = new RedisClient();
+redis.connnect();
 
 mongoose.connect("mongodb://localhost/E_COMMERCE", {
   useNewUrlParser: true,
@@ -38,3 +41,14 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`${process.env.NODE_ENV} environment running on port ${PORT}`);
 });
+
+setInterval(() => {
+  console.log("Keeping alive - Node.js Performance Test with Redis");
+  redis.set("ping", "pong");
+}, 1000 * 60 * 4);
+
+redis.redisClient.on("connect", () => console.log("connected to redis"));
+
+redis.redisClient.on("error", (err) => console.log("Redis error " + err));
+
+export { redis };

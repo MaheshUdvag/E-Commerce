@@ -64,7 +64,7 @@ const ProductDetail = (props: any) => {
         </Typography>
       </div>
 
-      {isMobile ? <ProductButton product={product} /> : null}
+      {isMobile && <ProductButton product={product} />}
 
       {product.attributes.length > 0 ? (
         <div className={classes.content}>

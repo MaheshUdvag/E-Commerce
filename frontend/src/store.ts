@@ -53,9 +53,9 @@ type UserInfo = {
   authenticated: boolean;
 };
 
-const userInfo: UserInfo = JSON.parse(
-  localStorage.getItem("loggedInUser") || "{}"
-);
+const userInfo: UserInfo =
+  localStorage.getItem("loggedInUser") !== null &&
+  JSON.parse(localStorage.getItem("loggedInUser") || "{}");
 
 const initialState = {
   userLogin: {
