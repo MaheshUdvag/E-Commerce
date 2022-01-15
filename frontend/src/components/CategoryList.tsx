@@ -9,15 +9,16 @@ const useStyles = makeStyles(() => ({
   },
   categoryTitle: {
     padding: 10,
+    textTransform: "uppercase",
   },
 }));
-const CategoryList: React.FC<any> = ({ categories }) => {
+const CategoryList: React.FC<any> = ({ categories, label }) => {
   const classes = useStyles();
 
   return (
     <Container className={classes.container}>
       <Typography component="h5" variant="h5" className={classes.categoryTitle}>
-        TOP CATEGORIES
+        {label}
       </Typography>
       <Grid container alignItems="center" spacing={2}>
         {categories.map((category: any) =>

@@ -29,7 +29,9 @@ const HomePage = () => {
   return (
     <>
       <MyCarousel />
-      {categories && !categoryLoad && <CategoryList categories={categories} />}
+      {categories && !categoryLoad && (
+        <CategoryList categories={categories} label="Top Categories" />
+      )}
       <ProductList
         products={products}
         loading={loading}

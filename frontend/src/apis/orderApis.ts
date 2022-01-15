@@ -12,6 +12,17 @@ export const activeOrder = (token: string) => {
   });
 };
 
+export const getOrderByStatus = (token: string, status: string) => {
+  return axios({
+    method: "GET",
+    url: `/api/orders/byStatus/${status}`,
+    headers: {
+      "content-type": "application/json",
+      Authorization: "Bearer " + token,
+    },
+  });
+};
+
 export const completedOrder = (token: string, orderId: string) => {
   return axios({
     method: "POST",

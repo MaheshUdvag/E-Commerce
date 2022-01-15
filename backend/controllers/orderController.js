@@ -94,3 +94,25 @@ export const getCompletedOrder = asyncHandler(async (req, res) => {
     );
   }
 });
+
+export const getOrderByStatus = asyncHandler(async (req, res) => {
+  const user = req.user;
+  const { status } = req.params;
+
+  const order = await Order.find({
+    user,
+    status,
+  }).populate({
+    path: "orderItems",
+    populate: {
+      path: "product",
+      model: "product",
+    },
+  });
+
+  if (order) {
+    res.send(order);
+  } else {
+    throw new Error("No Orders for the given status.");
+  }
+});

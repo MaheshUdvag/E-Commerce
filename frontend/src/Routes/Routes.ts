@@ -22,6 +22,11 @@ const routes: IRoute[] = [
     exact: true,
   },
   {
+    path: "/categories",
+    component: lazy(() => import("../screens/Category/CategoryListPage")),
+    exact: true,
+  },
+  {
     path: "/login",
     component: lazy(() => import("../screens/Login/LoginPage")),
     exact: true,

@@ -22,6 +22,7 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useHistory } from "react-router-dom";
 import { ICategory } from "./Interface/ICategory";
 import useUserLogin from "../hooks/useUserLogin";
+import SearchBar from "./SearchBar";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,15 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
-  },
-  title: {
-    [theme.breakpoints.up("md")]: {
-      marginLeft: 180,
-    },
-    [theme.breakpoints.down("sm")]: {
-      flexGrow: 1,
-    },
-    flexGrow: 0.8,
   },
   topCategories: {
     [theme.breakpoints.up("md")]: {
@@ -64,6 +56,14 @@ const useStyles = makeStyles((theme) => ({
   },
   menuitem: {
     width: 160,
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    [theme.breakpoints.down("md")]: {
+      justifyContent: "space-between",
+    },
   },
 }));
 
@@ -128,14 +128,11 @@ const Header = () => {
     <>
       <div className={classes.root}>
         <AppBar>
-          <Toolbar>
-            <Typography
-              onClick={() => history.push("/")}
-              variant="h6"
-              className={classes.title}
-            >
-              COMMERCE
+          <Toolbar className={classes.header}>
+            <Typography variant="h6">
+              <span onClick={() => history.push("/")}>COMMERCE</span>
             </Typography>
+            {isMobile === false && <SearchBar />}
             {isMobile ? (
               <div>
                 <IconButton
@@ -186,18 +183,32 @@ const Header = () => {
               <ClickAwayListener onClickAway={(event) => handleMenu(event)}>
                 <span>
                   {isMobile === true && (
-                    <Button
-                      color="secondary"
-                      fullWidth={true}
-                      style={{ padding: "10px", minWidth: 170 }}
-                      onClick={() => {
-                        setMenuAnchorEl(null);
-                        setOpenUserMenu(false);
-                        history.push("/cart");
-                      }}
-                    >
-                      CART
-                    </Button>
+                    <>
+                      <Button
+                        color="secondary"
+                        onClick={() => {
+                          setMenuAnchorEl(null);
+                          setOpenUserMenu(false);
+                          history.push("/categories");
+                        }}
+                        fullWidth={true}
+                        style={{ padding: "10px", minWidth: 170 }}
+                      >
+                        Categories
+                      </Button>
+                      <Button
+                        color="secondary"
+                        fullWidth={true}
+                        style={{ padding: "10px", minWidth: 170 }}
+                        onClick={() => {
+                          setMenuAnchorEl(null);
+                          setOpenUserMenu(false);
+                          history.push("/cart");
+                        }}
+                      >
+                        CART
+                      </Button>
+                    </>
                   )}
                   <Button
                     color="secondary"
@@ -227,63 +238,69 @@ const Header = () => {
               </ClickAwayListener>
             </Popper>
           </Toolbar>
-          <Toolbar className={classes.toolBar}>
-            <div className={classes.topCategories}>
-              {categories
-                ? categories.map((category: ICategory) => (
-                    <div
-                      key={category._id}
-                      onClick={(event: any) => {
-                        handleClick(event, category._id);
-                      }}
-                    >
-                      <Button className={classes.category} color="primary">
-                        {category.name.toUpperCase()}
-                      </Button>
-                      <Popper
-                        open={selectedCategory === category._id}
-                        id={category._id}
-                        anchorEl={anchorEl}
-                        placement={placement}
-                        transition
-                        style={{
-                          marginTop: 5,
-                          backgroundColor: "#232f3e",
-                          maxWidth: 170,
-                          borderRadius: 5,
+          {isMobile === false ? (
+            <Toolbar className={classes.toolBar}>
+              <div className={classes.topCategories}>
+                {categories
+                  ? categories.map((category: ICategory) => (
+                      <div
+                        key={category._id}
+                        onClick={(event: any) => {
+                          handleClick(event, category._id);
                         }}
                       >
-                        <ClickAwayListener
-                          onClickAway={() => {
-                            setSelectedCategory(null);
-                            setAnchorEl(null);
+                        <Button className={classes.category} color="primary">
+                          {category.name.toUpperCase()}
+                        </Button>
+                        <Popper
+                          open={selectedCategory === category._id}
+                          id={category._id}
+                          anchorEl={anchorEl}
+                          placement={placement}
+                          transition
+                          style={{
+                            marginTop: 5,
+                            backgroundColor: "#232f3e",
+                            maxWidth: 170,
+                            borderRadius: 5,
                           }}
                         >
-                          <span>
-                            {category.subCategories.map((subCategory) => (
-                              <Button
-                                color="secondary"
-                                id="a"
-                                key={subCategory._id}
-                                onClick={() => {
-                                  history.push({
-                                    pathname: `/category/${subCategory.path}`,
-                                  });
-                                }}
-                                fullWidth={true}
-                                style={{ padding: "10px", minWidth: 170 }}
-                              >
-                                {subCategory.name}
-                              </Button>
-                            ))}
-                          </span>
-                        </ClickAwayListener>
-                      </Popper>
-                    </div>
-                  ))
-                : null}
-            </div>
-          </Toolbar>
+                          <ClickAwayListener
+                            onClickAway={() => {
+                              setSelectedCategory(null);
+                              setAnchorEl(null);
+                            }}
+                          >
+                            <span>
+                              {category.subCategories.map((subCategory) => (
+                                <Button
+                                  color="secondary"
+                                  id="a"
+                                  key={subCategory._id}
+                                  onClick={() => {
+                                    history.push({
+                                      pathname: `/category/${subCategory.path}`,
+                                    });
+                                  }}
+                                  fullWidth={true}
+                                  style={{ padding: "10px", minWidth: 170 }}
+                                >
+                                  {subCategory.name}
+                                </Button>
+                              ))}
+                            </span>
+                          </ClickAwayListener>
+                        </Popper>
+                      </div>
+                    ))
+                  : null}
+              </div>
+            </Toolbar>
+          ) : (
+            <Toolbar>
+              <SearchBar fullWidth={true} />
+            </Toolbar>
+          )}
         </AppBar>
       </div>
     </>
