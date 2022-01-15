@@ -265,7 +265,9 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
                   helperText={
                     errors.includes(orderItem.product._id)
                       ? "Maximum units allowed is 10"
-                      : null
+                      : `${orderItem.product.price.offerPrice.toFixed(
+                          2
+                        )} per unit`
                   }
                   className={classes.quantity}
                 />

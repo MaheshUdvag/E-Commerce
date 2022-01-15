@@ -30,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     borderBottom: "2px solid #f0f0f0",
     padding: 5,
   },
+  rating: {
+    zIndex: -1,
+  },
 }));
 
 const ProductDetail = (props: any) => {
@@ -50,6 +53,7 @@ const ProductDetail = (props: any) => {
           name="read-only"
           defaultValue={3.5}
           precision={0.5}
+          className={classes.rating}
           readOnly
         />
 

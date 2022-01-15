@@ -23,23 +23,13 @@ const ProductDetailPage = (props: any) => {
   });
   const { product }: { product: IProduct } = getProductDetail;
 
-  const description: IProductDescription =
+  const description: IProductDescription | null =
     product && Object.keys(product).length !== 0
       ? product.description.filter((desc) => desc.language.languageId === -1)[0]
-      : {
-          _id: "",
-          shortDescription: "",
-          longDescription: "",
-          thumbnailImage: "",
-          fullImage: "",
-          language: {
-            _id: "",
-            languageId: 0,
-            name: "",
-            description: "",
-            __v: 0,
-          },
-        };
+      : null;
+
+  const image: string = description?.fullImage ? description.fullImage : "";
+  const alt: string = product?.name ? product.name : "";
 
   useEffect(() => {
     dispatch(getProductDetailsByPath(path));
@@ -50,12 +40,13 @@ const ProductDetailPage = (props: any) => {
     <>
       {product && Object.keys(product).length > 0 ? (
         <Container style={{ paddingBottom: 30 }}>
-          <Button onClick={() => history.goBack()}>Go Back</Button>
-
           <Grid container spacing={4}>
             <Grid item lg={4} md={6} sm={6} xs={12}>
-              <ProductImage description={description} />
-              {!isMobile && <ProductButton product={product} />}
+              <div id="sticky" style={{ position: "sticky", top: 120 }}>
+                <Button onClick={() => history.goBack()}>Go Back</Button>
+                <ProductImage image={image} alt={alt} />
+                {!isMobile && <ProductButton product={product} />}
+              </div>
             </Grid>
             <Grid item lg={8} md={6} sm={6} xs={12}>
               <ProductDetail product={product} description={description} />

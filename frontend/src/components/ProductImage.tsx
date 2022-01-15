@@ -1,41 +1,29 @@
 import React from "react";
-import { Image } from "cloudinary-react";
-import { makeStyles } from "@material-ui/core/styles";
-import { IProductDescription } from "./Interface/IProduct";
+import ReactImageMagnify from "react-image-magnify";
 
-const useStyles = makeStyles((theme) => ({
-  productImage: {
-    [theme.breakpoints.up("sm")]: {
-      position: "sticky",
-      top: 120,
-    },
-  },
-  image: {
-    width: "100%",
-  },
-}));
+interface IProductImage {
+  image: string;
+  alt: string;
+}
 
-const ProductImage = ({
-  description,
-}: {
-  description: IProductDescription;
-}) => {
-  const classes = useStyles();
-  const image =
-    description && Object.keys(description).length > 0
-      ? description.fullImage
-      : "";
-
+const ProductImage: React.FC<IProductImage> = ({ image, alt }) => {
   return (
-    <div className={classes.productImage}>
-      <Image
-        src={image}
-        cloudName="dvvxjkifm"
-        height="400"
-        className={classes.image}
-        crop="scale"
-      />
-    </div>
+    <ReactImageMagnify
+      {...{
+        smallImage: {
+          alt: alt,
+          isFluidWidth: false,
+          src: image,
+          width: 400,
+          height: 400,
+        },
+        largeImage: {
+          src: image,
+          width: 1200,
+          height: 1800,
+        },
+      }}
+    />
   );
 };
 
