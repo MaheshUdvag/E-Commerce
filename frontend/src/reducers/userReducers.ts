@@ -10,6 +10,7 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  USER_SESSION_VALIDATE,
   USER_UPDATE_FAIL,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
@@ -26,9 +27,9 @@ export const userLoginReducer = (state = {}, action: any) => {
       }
       return { loading: false, user: action.payload, authenticated };
     case USER_LOGIN_FAIL:
-      return { error: action.payload, authenticated: false };
+      return { loading: false, error: action.payload, authenticated: false };
     case USER_LOGOUT:
-      return { authenticated: false };
+      return { loading: false, authenticated: false };
     default:
       return state;
   }
@@ -82,5 +83,19 @@ export const userUpdateReducer = (state = {}, action: any) => {
       return { error: action.payload };
     default:
       return state;
+  }
+};
+
+export const validateSessionReducer = (state = {}, action: any) => {
+  if (action.type === USER_SESSION_VALIDATE) {
+    if (action.payload?.message === "Invalid Token") {
+      console.log("adde");
+      localStorage.removeItem("loggedInUser");
+      return { invalidSession: true };
+    } else {
+      return { invalidSession: false };
+    }
+  } else {
+    return state;
   }
 };

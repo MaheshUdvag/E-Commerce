@@ -42,7 +42,7 @@ const ProductDetailPage = (props: any) => {
         <Container style={{ paddingBottom: 30 }}>
           <Grid container spacing={4}>
             <Grid item lg={4} md={6} sm={6} xs={12}>
-              <div id="sticky" style={{ position: "sticky", top: 120 }}>
+              <div style={{ position: "sticky", top: 120 }}>
                 <Button onClick={() => history.goBack()}>Go Back</Button>
                 <ProductImage image={image} alt={alt} />
                 {!isMobile && <ProductButton product={product} />}

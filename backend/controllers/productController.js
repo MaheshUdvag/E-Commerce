@@ -220,3 +220,34 @@ export const updateProduct = asyncHandler(async (req, res) => {
     throw new Error(`Error occured while updating product ${sku}`);
   }
 });
+
+export const getProductsBySearchTerm = asyncHandler(async (req, res) => {
+  const count = parseInt(req.query.count || 4);
+  const term = req.query.term;
+
+  const cacheKey = `products|${term}`;
+  // let products = JSON.parse(await redis.get(cacheKey));
+  let products;
+  if (!products) {
+    products = await Product.find({
+      name: new RegExp(term, "i"),
+    })
+      .populate({
+        path: "description",
+        populate: {
+          path: "language",
+          model: "language",
+        },
+      })
+      .limit(count);
+    // await redis.set(cacheKey, JSON.stringify(products));
+  }
+
+  if (products) {
+    const total = products.length;
+    res.send({ total, products });
+  } else {
+    res.status(404);
+    throw new Error("No Products Found");
+  }
+});

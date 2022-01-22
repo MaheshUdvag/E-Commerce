@@ -210,30 +210,34 @@ const Header = () => {
                       </Button>
                     </>
                   )}
-                  <Button
-                    color="secondary"
-                    onClick={() => {
-                      setMenuAnchorEl(null);
-                      setOpenUserMenu(false);
-                      profile();
-                    }}
-                    fullWidth={true}
-                    style={{ padding: "10px", minWidth: 170 }}
-                  >
-                    Profile
-                  </Button>
-                  <Button
-                    color="secondary"
-                    onClick={() => {
-                      setMenuAnchorEl(null);
-                      setOpenUserMenu(false);
-                      logOut();
-                    }}
-                    fullWidth={true}
-                    style={{ padding: "10px", minWidth: 170 }}
-                  >
-                    Logout
-                  </Button>
+                  {authenticated === true && (
+                    <>
+                      <Button
+                        color="secondary"
+                        onClick={() => {
+                          setMenuAnchorEl(null);
+                          setOpenUserMenu(false);
+                          profile();
+                        }}
+                        fullWidth={true}
+                        style={{ padding: "10px", minWidth: 170 }}
+                      >
+                        Profile
+                      </Button>
+                      <Button
+                        color="secondary"
+                        onClick={() => {
+                          setMenuAnchorEl(null);
+                          setOpenUserMenu(false);
+                          logOut();
+                        }}
+                        fullWidth={true}
+                        style={{ padding: "10px", minWidth: 170 }}
+                      >
+                        Logout
+                      </Button>
+                    </>
+                  )}
                 </span>
               </ClickAwayListener>
             </Popper>

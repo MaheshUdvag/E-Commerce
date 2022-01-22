@@ -14,7 +14,7 @@ const ProductImage: React.FC<IProductImage> = ({ image, alt }) => {
           alt: alt,
           isFluidWidth: false,
           src: image,
-          width: 400,
+          width: 300,
           height: 400,
         },
         largeImage: {

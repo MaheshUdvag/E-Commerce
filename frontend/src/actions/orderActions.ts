@@ -7,19 +7,27 @@ import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
 } from "../ActionTypes/order";
+import { USER_SESSION_VALIDATE } from "../ActionTypes/user";
 
 export const getActiveOrder = () => async (dispatch: any, getState: any) => {
   try {
-    dispatch({ type: ACTIVE_ORDER_REQUEST });
-
     const {
       userLogin: { user },
     } = getState();
-    const token = user.token;
+    if (user) {
+      dispatch({ type: ACTIVE_ORDER_REQUEST });
+      const token = user.token;
 
-    const { data } = await activeOrder(token);
-    dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+      const { data } = await activeOrder(token);
+      dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+    }
   } catch (err: any) {
+    console.log(err);
+
+    dispatch({
+      type: USER_SESSION_VALIDATE,
+      payload: err.response.data,
+    });
     dispatch({ type: ACTIVE_ORDER_FAIL, payload: err.response });
   }
 };
@@ -32,17 +40,22 @@ export const createOrderAction =
   (productId: string, quantity: number) =>
   async (dispatch: any, getState: any) => {
     try {
-      dispatch({ type: CREATE_ORDER_REQUEST });
-
       const {
         userLogin: { user },
       } = getState();
-      const token = user.token;
+      if (user) {
+        dispatch({ type: CREATE_ORDER_REQUEST });
+        const token = user.token;
 
-      const { data } = await createOrder(productId, quantity, token);
-      dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
-      dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+        const { data } = await createOrder(productId, quantity, token);
+        dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
+        dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+      }
     } catch (err: any) {
+      dispatch({
+        type: USER_SESSION_VALIDATE,
+        payload: err.response.data,
+      });
       dispatch({ type: CREATE_ORDER_FAIL, payload: err.response });
     }
   };

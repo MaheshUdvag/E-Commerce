@@ -18,6 +18,7 @@ import {
   userProfileReducer,
   userRegisterReducer,
   userUpdateReducer,
+  validateSessionReducer,
 } from "./reducers/userReducers";
 import { reducer as formReducer } from "redux-form";
 import {
@@ -43,6 +44,7 @@ const reducer = combineReducers({
   removeItem: removeItemReducer,
   createOrder: createOrderReducer,
   checkoutAddress: setCheckoutAddressReducer,
+  session: validateSessionReducer,
 });
 
 type UserInfo = {

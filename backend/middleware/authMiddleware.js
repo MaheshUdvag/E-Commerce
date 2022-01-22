@@ -10,7 +10,13 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-    const decode = await jwt.verify(token, process.env.JWT_SECRET);
+
+    let decode;
+    try {
+      decode = await jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      throw new Error("Invalid Token");
+    }
 
     req.user = await UserSchema.findById(decode.id).select("-password");
 

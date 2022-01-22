@@ -17,6 +17,7 @@ import {
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
   USER_REGISTER_SUCCESS,
+  USER_SESSION_VALIDATE,
   USER_UPDATE_FAIL,
   USER_UPDATE_REQUEST,
   USER_UPDATE_SUCCESS,
@@ -38,6 +39,11 @@ export const logoutUser = () => async (dispatch: any) => {
   localStorage.removeItem("loggedInUser");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: {} });
+  dispatch({
+    type: USER_SESSION_VALIDATE,
+    payload: {},
+  });
+  dispatch({ type: USER_PROFILE_SUCCESS, payload: {} });
 };
 
 export const registerUser =
@@ -65,6 +71,10 @@ export const getUser = () => async (dispatch: any, getState: any) => {
 
     dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
   } catch (err: any) {
+    dispatch({
+      type: USER_SESSION_VALIDATE,
+      payload: err.response.data,
+    });
     dispatch({ type: USER_PROFILE_FAIL, payload: err.response });
   }
 };
@@ -84,6 +94,10 @@ export const updateUser =
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
       localStorage.setItem("loggedInUser", JSON.stringify(data));
     } catch (err: any) {
+      dispatch({
+        type: USER_SESSION_VALIDATE,
+        payload: err.response.data,
+      });
       dispatch({ type: USER_UPDATE_FAIL, payload: err.response });
     }
   };
