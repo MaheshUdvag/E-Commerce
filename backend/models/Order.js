@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 
 const OrderSchema = new Schema(
   {
+    orderId: { type: Number, required: true, unique: true },
     total: { type: Number, required: true },
     totalSalesTax: { type: Number, required: true },
     totalShippingTax: { type: Number, required: true },
@@ -20,6 +21,7 @@ const OrderSchema = new Schema(
     address: AddressSchema,
     orderItems: [OrderItemSchema],
     payment: PaymentSchema,
+    placedTime: { type: Date },
   },
   {
     timestamps: true,

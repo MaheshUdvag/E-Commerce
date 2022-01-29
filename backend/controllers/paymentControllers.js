@@ -199,6 +199,7 @@ export const approvePayPalOrder = asyncHandler(async (req, res) => {
     payerId: response.result.payer.payer_id,
   };
   currentOrder.status = "S";
+  currentOrder.placedTime = new Date();
   currentOrder
     .save()
     .then(() => {
@@ -220,6 +221,7 @@ export const approveOrder = asyncHandler(async (req, res) => {
   };
   currentOrder.address = address;
   currentOrder.status = "S";
+  currentOrder.placedTime = new Date();
   currentOrder
     .save()
     .then(() => {

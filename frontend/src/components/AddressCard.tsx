@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       height: "19vh",
     },
-    width: "200px",
     padding: 15,
   },
   paperSelected: {

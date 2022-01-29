@@ -80,6 +80,28 @@ const OrderSummary: React.FC<IOrderSummary> = ({
           </Typography>
         </Grid>
       </Grid>
+      {order.payment?.paymentType && (
+        <Grid container className={classes.grid}>
+          <Grid item lg={7} md={7} sm={7} xs={7}>
+            <Typography>Payment</Typography>
+          </Grid>
+          <Grid item lg={5} md={5} sm={5} xs={5}>
+            <Typography>{order.payment?.paymentType}</Typography>
+          </Grid>
+        </Grid>
+      )}
+      {order?.placedTime && (
+        <Grid container className={classes.grid}>
+          <Grid item lg={6} md={7} sm={7} xs={7}>
+            <Typography>Placed on</Typography>
+          </Grid>
+          <Grid item lg={6} md={5} sm={5} xs={5}>
+            <Typography>
+              {order?.placedTime.toString().substring(0, 10)}
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
       <br />
       {showCheckout && (
         <Grid container>

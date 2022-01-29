@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: "space-between",
     },
   },
+  cursor: {
+    cursor: "pointer",
+  },
 }));
 
 const Header = () => {
@@ -129,7 +132,7 @@ const Header = () => {
       <div className={classes.root}>
         <AppBar>
           <Toolbar className={classes.header}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.cursor}>
               <span onClick={() => history.push("/")}>COMMERCE</span>
             </Typography>
             {isMobile === false && <SearchBar />}

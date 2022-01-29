@@ -9,6 +9,9 @@ import {
   CREATE_ORDER_FAIL,
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
+  PLACED_ORDER_FAIL,
+  PLACED_ORDER_REQUEST,
+  PLACED_ORDER_SUCCESS,
   REMOVE_ITEM_FAIL,
   REMOVE_ITEM_REQUEST,
   REMOVE_ITEM_SUCCESS,
@@ -24,6 +27,22 @@ export const activeOrderReducer = (
     case ACTIVE_ORDER_SUCCESS:
       return { loading: false, order: action.payload };
     case ACTIVE_ORDER_FAIL:
+      return { error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const placedOrdersReducer = (
+  state = {},
+  action: { type: string; payload: IOrder[] }
+) => {
+  switch (action.type) {
+    case PLACED_ORDER_REQUEST:
+      return { loading: true };
+    case PLACED_ORDER_SUCCESS:
+      return { loading: false, orders: action.payload };
+    case PLACED_ORDER_FAIL:
       return { error: action.payload };
     default:
       return state;

@@ -3,6 +3,7 @@ import { IAddress } from "./IUser";
 
 export interface IOrder {
   _id: string;
+  orderId: number;
   total: number;
   totalSalesTax: number;
   totalShippingTax: number;
@@ -14,6 +15,7 @@ export interface IOrder {
   createdAt: Date;
   updatedAt: Date;
   payment?: IPayment;
+  placedTime?: Date;
   __v: Number;
 }
 

@@ -1,4 +1,4 @@
-import { activeOrder, createOrder } from "../apis/orderApis";
+import { activeOrder, createOrder, getOrderByStatus } from "../apis/orderApis";
 import {
   ACTIVE_ORDER_FAIL,
   ACTIVE_ORDER_REQUEST,
@@ -6,6 +6,9 @@ import {
   CREATE_ORDER_FAIL,
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
+  PLACED_ORDER_FAIL,
+  PLACED_ORDER_REQUEST,
+  PLACED_ORDER_SUCCESS,
 } from "../ActionTypes/order";
 import { USER_SESSION_VALIDATE } from "../ActionTypes/user";
 
@@ -29,6 +32,29 @@ export const getActiveOrder = () => async (dispatch: any, getState: any) => {
       payload: err.response.data,
     });
     dispatch({ type: ACTIVE_ORDER_FAIL, payload: err.response });
+  }
+};
+
+export const getPlacedOrders = () => async (dispatch: any, getState: any) => {
+  try {
+    const {
+      userLogin: { user },
+    } = getState();
+    console.log("in");
+    if (user) {
+      dispatch({ type: PLACED_ORDER_REQUEST });
+      const token = user.token;
+      console.log("call");
+
+      const { data } = await getOrderByStatus(token, "S");
+      dispatch({ type: PLACED_ORDER_SUCCESS, payload: data });
+    }
+  } catch (err: any) {
+    dispatch({
+      type: USER_SESSION_VALIDATE,
+      payload: err.response.data,
+    });
+    dispatch({ type: PLACED_ORDER_FAIL, payload: err.response });
   }
 };
 

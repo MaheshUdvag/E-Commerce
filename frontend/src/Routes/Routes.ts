@@ -1,6 +1,8 @@
 import { lazy } from "react";
 import PasswordReset from "../components/PasswordReset";
 import AddressBook from "../components/AddressBook";
+import OrderList from "../components/OrderList";
+import OrderDetail from "../components/OrderDetail";
 
 export interface IRoute {
   path: string;
@@ -55,6 +57,18 @@ const routes: IRoute[] = [
       {
         path: "/profile/address",
         component: AddressBook,
+        exact: false,
+        type: "authenticated",
+      },
+      {
+        path: "/profile/orders",
+        component: OrderList,
+        exact: false,
+        type: "authenticated",
+      },
+      {
+        path: "/profile/order/:id",
+        component: OrderDetail,
         exact: false,
         type: "authenticated",
       },

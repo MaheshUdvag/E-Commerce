@@ -51,7 +51,7 @@ const OrderSuccessPage: React.FC<any> = (props) => {
           <Grid container spacing={1}>
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <Typography variant="body1">
-                Your Order Id is {order._id}
+                Your Order Id is {order.orderId}
               </Typography>
             </Grid>
             <Grid item lg={12} md={12} sm={12} xs={12}>

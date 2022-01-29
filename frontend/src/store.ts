@@ -25,6 +25,7 @@ import {
   activeOrderReducer,
   addUpdateOrderReducer,
   createOrderReducer,
+  placedOrdersReducer,
   removeItemReducer,
 } from "./reducers/orderReducers";
 import { setCheckoutAddressReducer } from "./reducers/checkoutReducers";
@@ -45,6 +46,7 @@ const reducer = combineReducers({
   createOrder: createOrderReducer,
   checkoutAddress: setCheckoutAddressReducer,
   session: validateSessionReducer,
+  orders: placedOrdersReducer,
 });
 
 type UserInfo = {

@@ -41,14 +41,14 @@ const ProductDetailPage = (props: any) => {
       {product && Object.keys(product).length > 0 ? (
         <Container style={{ paddingBottom: 30 }}>
           <Grid container spacing={4}>
-            <Grid item lg={4} md={6} sm={6} xs={12}>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
               <div style={{ position: "sticky", top: 120 }}>
                 <Button onClick={() => history.goBack()}>Go Back</Button>
                 <ProductImage image={image} alt={alt} />
                 {!isMobile && <ProductButton product={product} />}
               </div>
             </Grid>
-            <Grid item lg={8} md={6} sm={6} xs={12}>
+            <Grid item lg={8} md={6} sm={12} xs={12}>
               <ProductDetail product={product} description={description} />
             </Grid>
           </Grid>

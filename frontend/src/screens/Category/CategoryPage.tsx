@@ -22,6 +22,7 @@ const CategoryPage = (props: any) => {
 
   useEffect(() => {
     dispatch(listProductsByCategory(categoryPath, 10, 1));
+    setSortOptions(1);
     window.scrollTo(0, 0);
   }, [categoryPath, dispatch]);
 

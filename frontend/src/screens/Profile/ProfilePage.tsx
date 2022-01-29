@@ -1,4 +1,10 @@
-import { Grid, Typography, Container, Button } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  Container,
+  Button,
+  Snackbar,
+} from "@material-ui/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Switch, useHistory } from "react-router-dom";
@@ -9,6 +15,12 @@ import PasswordReset from "../../components/PasswordReset";
 import AddressBook from "../../components/AddressBook";
 import { PROFILE_PAGE_CONSTANTS } from "./ProfilePageConstants";
 import { useTranslation } from "react-i18next";
+import OrderList from "../../components/OrderList";
+import { getPlacedOrders } from "../../actions/orderActions";
+import { useState } from "react";
+import OrderDetail from "../../components/OrderDetail";
+import { IOrder } from "../../components/Interface/IOrder";
+import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -47,22 +59,45 @@ const ProfilePage = (props: any) => {
   const { user: profile } = useSelector((state: any) => {
     return state.userProfile;
   });
+  const { orders } = useSelector((state: any) => {
+    return state.orders;
+  });
   const pathName = props.history.location.pathname;
+
   const { MY_PROFILE, PROFILE_MENU } = PROFILE_PAGE_CONSTANTS;
   const { t } = useTranslation();
+  const [orderDetail, setOrderDetail] = useState<IOrder>();
+  const [open, setOpen] = useState<boolean>();
 
   useEffect(() => {
     if (!profile) {
       dispatch(getUser());
+    } else {
+      dispatch(getPlacedOrders());
     }
     window.scrollTo(0, 0);
   }, [dispatch, history, profile]);
 
+  const setOrderById = (orderId: Number) => {
+    const order = orders?.filter(
+      (order: IOrder) => order.orderId === orderId
+    )[0];
+    if (order) setOrderDetail(order);
+    else {
+      setOpen(true);
+      history.push("/profile");
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Container>
-        <Grid container spacing={4} style={{ minHeight: "55vh" }}>
-          <Grid item lg={4} md={6} sm={12} xs={12}>
+        <Grid container spacing={4} style={{ marginBottom: 50 }}>
+          <Grid item lg={4} md={3} sm={12} xs={12}>
             <Typography variant="h4" component="h4" className={classes.title}>
               {t(MY_PROFILE)}
             </Typography>
@@ -83,7 +118,7 @@ const ProfilePage = (props: any) => {
               </Button>
             ))}
           </Grid>
-          <Grid item lg={8} md={6} sm={12} xs={12}>
+          <Grid item lg={8} md={9} sm={12} xs={12} style={{ padding: 10 }}>
             <Switch>
               <Route path="/profile" exact>
                 <Account initialValues={profile} />
@@ -94,10 +129,27 @@ const ProfilePage = (props: any) => {
               <Route path="/profile/change-password">
                 <PasswordReset />
               </Route>
+              <Route path="/profile/orders">
+                <OrderList
+                  orders={orders}
+                  selectOrder={(order: IOrder) => {
+                    setOrderDetail(order);
+                    history.push(`/profile/order/${order.orderId}`);
+                  }}
+                />
+              </Route>
+              <Route path="/profile/order/:id">
+                <OrderDetail order={orderDetail} setOrderById={setOrderById} />
+              </Route>
             </Switch>
           </Grid>
         </Grid>
       </Container>
+      <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          Invalid order Id
+        </Alert>
+      </Snackbar>
     </>
   );
 };

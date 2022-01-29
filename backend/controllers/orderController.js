@@ -30,8 +30,10 @@ export const createOrder = asyncHandler(async (req, res) => {
       product,
       quantity,
     };
-
+    const orderId =
+      Math.floor(new Date().getTime() / 1000) + Math.floor(Math.random() * 10);
     const order = new Order({
+      orderId,
       total: price,
       totalSalesTax: salesTax,
       totalShippingTax: shippingTax,

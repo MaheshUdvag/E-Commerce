@@ -227,12 +227,12 @@ const CartItems = ({ order, page }: { order: IOrder; page?: string }) => {
                 <div
                   className={classes.product}
                   onClick={() =>
-                    history.push(`product/${orderItem.product.path}`)
+                    history.push(`/product/${orderItem.product.path}`)
                   }
                 >
                   <Image
                     cloudName="dvvxjkifm"
-                    style={{ height: 50, paddingRight: 10 }}
+                    style={{ height: 50, paddingRight: 10, width: 50 }}
                     crop="scale"
                     src={orderItem.product.description[0].thumbnailImage}
                   ></Image>
