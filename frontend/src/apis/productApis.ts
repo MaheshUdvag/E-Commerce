@@ -3,7 +3,7 @@ import axios from "axios";
 export const getProducts = (count: number) => {
   return axios({
     method: "GET",
-    url: "/admin/api/products",
+    url: "/api/products",
     params: {
       count,
       storeName: "MaheshCommerce",
@@ -21,7 +21,7 @@ export const getProductsByCategory = (
 ) => {
   return axios({
     method: "GET",
-    url: "/admin/api/products/byCategory",
+    url: "/api/products/byCategory",
     params: {
       path,
       count,
@@ -37,7 +37,7 @@ export const getProductsByCategory = (
 export const getProductDetail = (path: string) => {
   return axios({
     method: "GET",
-    url: `/admin/api/products//detail/${path}`,
+    url: `/api/products//detail/${path}`,
     params: {
       storeName: "MaheshCommerce",
     },

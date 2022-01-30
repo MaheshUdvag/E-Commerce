@@ -3,7 +3,7 @@ import axios from "axios";
 export const getCategories = () => {
   return axios({
     method: "GET",
-    url: "/admin/api/categories",
+    url: "/api/categories",
     params: {
       storeName: "MaheshCommerce",
     },
@@ -20,7 +20,7 @@ export const getProductsBySearchTerm = (
 ) => {
   return axios({
     method: "GET",
-    url: `/admin/api/products/bySearchTerm`,
+    url: `/api/products/bySearchTerm`,
     params: {
       count,
       sortBy,

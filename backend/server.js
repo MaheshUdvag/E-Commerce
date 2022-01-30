@@ -1,9 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import ProductRoutes from "./routes/administratorRoutes/products.js";
-import CategoryRoutes from "./routes/administratorRoutes/categories.js";
-import CatalogRoutes from "./routes/administratorRoutes/catalog.js";
+import ProductRoutes from "./routes/searchRoutes/products.js";
+import CategoryRoutes from "./routes/searchRoutes/categories.js";
+import CatalogRoutes from "./routes/searchRoutes/catalog.js";
 import UserRoutes from "./routes/storeRoutes/user.js";
 import OrderRoutes from "./routes/storeRoutes/order.js";
 import { requestNotFound, invalidRequest } from "./middleware/errorHandler.js";
@@ -28,9 +28,9 @@ mongoose.connection
   })
   .on("error", (error) => console.error("Error:", error));
 
-app.use("/admin/api/products", ProductRoutes);
-app.use("/admin/api/categories", CategoryRoutes);
-app.use("/admin/api/catalog", CatalogRoutes);
+app.use("/api/products", ProductRoutes);
+app.use("/api/categories", CategoryRoutes);
+app.use("/api/catalog", CatalogRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/orders", OrderRoutes);
 app.use(requestNotFound);
