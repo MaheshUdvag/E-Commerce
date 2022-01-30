@@ -97,13 +97,20 @@ export const getProductsByCategory = asyncHandler(async (req, res) => {
 
 export const getProductDetails = asyncHandler(async (req, res) => {
   const path = req.params.path;
-  const product = await Product.findOne({ path }).populate({
-    path: "description",
-    populate: {
-      path: "language",
-      model: "language",
-    },
-  });
+
+  const cacheKey = `product-detail|${path}`;
+  let product = JSON.parse(await redis.get(cacheKey));
+
+  if (!product) {
+    product = await Product.findOne({ path }).populate({
+      path: "description",
+      populate: {
+        path: "language",
+        model: "language",
+      },
+    });
+    await redis.set(cacheKey, JSON.stringify(product));
+  }
 
   if (product) {
     res.send({ product });
@@ -223,11 +230,35 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
 export const getProductsBySearchTerm = asyncHandler(async (req, res) => {
   const count = parseInt(req.query.count || 4);
+  const offset = parseInt(req.query.offset || 0);
   const term = req.query.term;
+  const sortBy = req.query.sortBy ? req.query.sortBy : "";
+  const storeName = req.query.storeName
+    ? req.query.storeName
+    : "MaheshCommerce";
 
-  const cacheKey = `products|${term}`;
-  // let products = JSON.parse(await redis.get(cacheKey));
-  let products;
+  let sortOption;
+
+  switch (sortBy) {
+    case "1":
+      sortOption = null;
+      break;
+    case "2":
+      sortOption = { "price.offerPrice": 1 };
+      break;
+    case "3":
+      sortOption = { "price.offerPrice": -1 };
+      break;
+    case "4":
+      sortOption = { name: 1 };
+      break;
+    default:
+      sortOption = null;
+      break;
+  }
+
+  const cacheKey = `products|${storeName}|${term}|${sortBy}|${offset}|${count}`;
+  let products = JSON.parse(await redis.get(cacheKey));
   if (!products) {
     products = await Product.find({
       name: new RegExp(term, "i"),
@@ -239,8 +270,10 @@ export const getProductsBySearchTerm = asyncHandler(async (req, res) => {
           model: "language",
         },
       })
-      .limit(count);
-    // await redis.set(cacheKey, JSON.stringify(products));
+      .limit(count)
+      .skip(offset)
+      .sort(sortOption);
+    await redis.set(cacheKey, JSON.stringify(products));
   }
 
   if (products) {

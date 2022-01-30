@@ -101,6 +101,11 @@ const routes: IRoute[] = [
     component: lazy(() => import("../screens/OrderSuccess/OrderSuccessPage")),
     exact: true,
   },
+  {
+    path: "/search-results",
+    component: lazy(() => import("../screens/Search/SearchPage")),
+    exact: true,
+  },
 ];
 
 export default routes;

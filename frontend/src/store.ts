@@ -12,7 +12,11 @@ import {
   productListByCategoryReducer,
   productDetailByPathReducer,
 } from "./reducers/productReducers";
-import { categoryListReducer } from "./reducers/categoryReducers";
+import {
+  categoryListReducer,
+  findProductsBySearchTermReducer,
+  productSuggestionReducer,
+} from "./reducers/categoryReducers";
 import {
   userLoginReducer,
   userProfileReducer,
@@ -47,6 +51,8 @@ const reducer = combineReducers({
   checkoutAddress: setCheckoutAddressReducer,
   session: validateSessionReducer,
   orders: placedOrdersReducer,
+  searchResults: findProductsBySearchTermReducer,
+  searchSuggestions: productSuggestionReducer,
 });
 
 type UserInfo = {

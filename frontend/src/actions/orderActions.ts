@@ -25,8 +25,6 @@ export const getActiveOrder = () => async (dispatch: any, getState: any) => {
       dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
     }
   } catch (err: any) {
-    console.log(err);
-
     dispatch({
       type: USER_SESSION_VALIDATE,
       payload: err.response.data,

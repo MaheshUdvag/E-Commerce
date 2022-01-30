@@ -12,3 +12,23 @@ export const getCategories = () => {
     },
   });
 };
+
+export const getProductsBySearchTerm = (
+  count: Number,
+  sortBy: Number,
+  term: string
+) => {
+  return axios({
+    method: "GET",
+    url: `/admin/api/products/bySearchTerm`,
+    params: {
+      count,
+      sortBy,
+      term,
+      storeName: "MaheshCommerce",
+    },
+    headers: {
+      "content-type": "application/json",
+    },
+  });
+};

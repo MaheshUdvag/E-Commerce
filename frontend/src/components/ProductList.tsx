@@ -80,7 +80,7 @@ const ProductList = (props: any) => {
           >
             {props.title.toUpperCase()}
           </Typography>
-          {page === "category" ? (
+          {page === "category" || page === "search" ? (
             <TextField
               id="outlined-select-sortOptions-native"
               select
