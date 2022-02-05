@@ -16,11 +16,14 @@ app.use(express.json());
 const redis = new RedisClient();
 redis.connnect();
 
-mongoose.connect("mongodb://localhost/E_COMMERCE", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true,
-});
+mongoose.connect(
+  "mongodb+srv://mahesh:maheshEcommerce@ecommerce.2ul3j.mongodb.net/E_COMMERCE?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  }
+);
 
 mongoose.connection
   .once("open", async () => {

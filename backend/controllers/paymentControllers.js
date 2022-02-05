@@ -44,8 +44,12 @@ export const createPayPalOrder = asyncHandler(async (req, res) => {
 
   currentOrder.address = address;
   const items = currentOrder.orderItems.map((item) => {
+    const productName =
+      item.product.name.length > 40
+        ? item.product.name.slice(0, 40)
+        : item.product.name;
     return {
-      name: item.product.name,
+      name: productName,
       unit_amount: {
         currency_code: "USD",
         value: item.price.toFixed(2),
@@ -88,7 +92,7 @@ export const createPayPalOrder = asyncHandler(async (req, res) => {
           },
         },
         items: items,
-        description: "test payment",
+        description: `Payment from ${full_name}`,
         shipping: {
           name: {
             full_name,

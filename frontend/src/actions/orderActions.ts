@@ -38,12 +38,9 @@ export const getPlacedOrders = () => async (dispatch: any, getState: any) => {
     const {
       userLogin: { user },
     } = getState();
-    console.log("in");
     if (user) {
       dispatch({ type: PLACED_ORDER_REQUEST });
       const token = user.token;
-      console.log("call");
-
       const { data } = await getOrderByStatus(token, "S");
       dispatch({ type: PLACED_ORDER_SUCCESS, payload: data });
     }

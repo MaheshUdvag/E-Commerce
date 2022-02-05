@@ -89,7 +89,6 @@ export const userUpdateReducer = (state = {}, action: any) => {
 export const validateSessionReducer = (state = {}, action: any) => {
   if (action.type === USER_SESSION_VALIDATE) {
     if (action.payload?.message === "Invalid Token") {
-      console.log("adde");
       localStorage.removeItem("loggedInUser");
       return { invalidSession: true };
     } else {

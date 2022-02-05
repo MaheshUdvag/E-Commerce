@@ -139,7 +139,14 @@ const ProfilePage = (props: any) => {
                 />
               </Route>
               <Route path="/profile/order/:id">
-                <OrderDetail order={orderDetail} setOrderById={setOrderById} />
+                {orders ? (
+                  <OrderDetail
+                    order={orderDetail}
+                    setOrderById={setOrderById}
+                  />
+                ) : (
+                  <></>
+                )}
               </Route>
             </Switch>
           </Grid>

@@ -20,8 +20,6 @@ const PayPal: React.FC<IPayPal> = ({ order, token, shippingAddress }) => {
 
   useEffect(() => {
     if (!buttonRendered) {
-      console.log(token);
-
       // @ts-ignore
       paypal
         .Buttons({
@@ -32,13 +30,10 @@ const PayPal: React.FC<IPayPal> = ({ order, token, shippingAddress }) => {
               shippingAddress._id
             );
             const id = data.id;
-            console.log(id);
 
             return id;
           },
           onApprove: async (data: any, actions: any) => {
-            console.log(data);
-
             const { orderID: payPalOrderId } = data;
             const response = await approvePayPalOrder(
               payPalOrderId,
@@ -71,8 +66,6 @@ const PayPal: React.FC<IPayPal> = ({ order, token, shippingAddress }) => {
             }
           },
           onError: (err: any) => {
-            //   setError(err),
-            console.log("err");
             console.error(err);
           },
         })

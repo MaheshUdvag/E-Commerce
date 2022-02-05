@@ -31,8 +31,6 @@ const Payment: React.FC<any> = ({ order, token, shippingAddress }) => {
   };
 
   const placeOrder = async () => {
-    console.log(paymentType);
-
     if (paymentType !== "") {
       const {
         data: { status },

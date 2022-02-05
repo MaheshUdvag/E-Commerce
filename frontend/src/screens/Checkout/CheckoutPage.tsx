@@ -141,35 +141,43 @@ const CheckoutPage: React.FC = () => {
         </Grid>
         <Grid item lg={9} md={9} sm={12} xs={12}>
           <Switch>
-            <Stepper activeStep={activeStep} orientation="vertical">
-              {steps.map((label, index) => (
-                <Step key={label}>
-                  <StepLabel>
-                    <Typography variant="h6">{label}</Typography>
-                  </StepLabel>
-                  <StepContent className={classes.actionsContainer}>
-                    {getStepContent(index, user, selectedAddress, order, token)}
-                    <Button
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      className={classes.button}
-                    >
-                      {t(BACK)}
-                    </Button>
-                    {activeStep < steps.length - 1 && selectedAddress && (
+            <>
+              <Stepper activeStep={activeStep} orientation="vertical">
+                {steps.map((label, index) => (
+                  <Step key={label}>
+                    <StepLabel>
+                      <Typography variant="h6">{label}</Typography>
+                    </StepLabel>
+                    <StepContent className={classes.actionsContainer}>
+                      {getStepContent(
+                        index,
+                        user,
+                        selectedAddress,
+                        order,
+                        token
+                      )}
                       <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleNext}
+                        disabled={activeStep === 0}
+                        onClick={handleBack}
                         className={classes.button}
                       >
-                        {t(NEXT)}
+                        {t(BACK)}
                       </Button>
-                    )}
-                  </StepContent>
-                </Step>
-              ))}
-            </Stepper>
+                      {activeStep < steps.length - 1 && selectedAddress && (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleNext}
+                          className={classes.button}
+                        >
+                          {t(NEXT)}
+                        </Button>
+                      )}
+                    </StepContent>
+                  </Step>
+                ))}
+              </Stepper>
+            </>
           </Switch>
         </Grid>
         {order && (

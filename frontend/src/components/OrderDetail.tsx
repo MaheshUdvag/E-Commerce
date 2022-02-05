@@ -18,7 +18,6 @@ const OrderDetail: React.FC<IOrderDetail> = ({ order, setOrderById }) => {
 
   useEffect(() => {
     if (!order) {
-      console.log(id);
       setOrderById(Number(id));
     }
   }, [order, id, setOrderById]);

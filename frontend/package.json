@@ -16,6 +16,7 @@
     "@types/react-dom": "^17.0.9",
     "axios": "^0.21.1",
     "cloudinary-react": "^1.7.0",
+    "dotenv": "^16.0.0",
     "http-proxy-middleware": "^2.0.2",
     "i18next": "^20.6.1",
     "i18next-browser-languagedetector": "^6.1.2",
@@ -24,6 +25,7 @@
     "react-device-detect": "^1.17.0",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.12.0",
+    "react-image-magnify": "^2.7.4",
     "react-material-ui-carousel": "^2.3.5",
     "react-redux": "^7.2.4",
     "react-router": "^5.2.0",
@@ -63,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-image-magnify": "^2.7.1",
     "@types/react-router-dom": "^5.1.8",
     "@types/redux-form": "^8.3.2"
   }

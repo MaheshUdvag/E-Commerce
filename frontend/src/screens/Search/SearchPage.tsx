@@ -8,7 +8,6 @@ const SearchPage: React.FC<any> = ({ location }) => {
 
   const dispatch = useDispatch();
   const searchTerm = searchParams.get("term") || "";
-  console.log(searchTerm);
 
   const [sortOptions, setSortOptions] = React.useState(1);
 
