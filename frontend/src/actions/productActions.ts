@@ -47,7 +47,10 @@ export const listProductsByCategory =
 export const getProductDetailsByPath =
   (path: string) => async (dispatch: any) => {
     try {
-      dispatch({ type: PRODUCT_DETAIL_BY_PATH_REQUEST });
+      dispatch({
+        type: PRODUCT_DETAIL_BY_PATH_REQUEST,
+        payload: { loading: true },
+      });
       const { data } = await getProductDetail(path);
       dispatch({
         type: PRODUCT_DETAIL_BY_PATH_SUCCESS,

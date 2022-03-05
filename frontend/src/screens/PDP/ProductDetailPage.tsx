@@ -21,7 +21,8 @@ const ProductDetailPage = (props: any) => {
   const getProductDetail = useSelector((state: any) => {
     return state.productDetailByPathReducer;
   });
-  const { product }: { product: IProduct } = getProductDetail;
+  const { product, loading }: { product: IProduct; loading: boolean } =
+    getProductDetail;
 
   const description: IProductDescription | null =
     product && Object.keys(product).length !== 0
@@ -38,7 +39,7 @@ const ProductDetailPage = (props: any) => {
 
   return (
     <>
-      {product && Object.keys(product).length > 0 ? (
+      {product && Object.keys(product).length > 0 && !loading ? (
         <Container style={{ paddingBottom: 30 }}>
           <Grid container spacing={4}>
             <Grid item lg={4} md={6} sm={12} xs={12}>
@@ -53,8 +54,10 @@ const ProductDetailPage = (props: any) => {
             </Grid>
           </Grid>
         </Container>
-      ) : (
+      ) : !loading ? (
         <Error />
+      ) : (
+        <></>
       )}
     </>
   );

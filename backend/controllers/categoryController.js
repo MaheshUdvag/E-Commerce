@@ -39,6 +39,7 @@ export const addCategory = asyncHandler(async (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const categoryImage = req.body.categoryImage;
+  const path = req.body.path;
 
   const language = await LanguageSchema.findOne({ languageId });
   const products = await ProductSchema.find({ sku: { $in: req.body.sku } });
@@ -57,6 +58,7 @@ export const addCategory = asyncHandler(async (req, res) => {
       categoryImage,
     },
     products,
+    path,
     subCategories,
   });
 

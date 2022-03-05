@@ -21,6 +21,7 @@ import { useState } from "react";
 import OrderDetail from "../../components/OrderDetail";
 import { IOrder } from "../../components/Interface/IOrder";
 import { Alert } from "@material-ui/lab";
+import FutureImplementation from "../../components/FutureImplementation";
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -147,6 +148,12 @@ const ProfilePage = (props: any) => {
                 ) : (
                   <></>
                 )}
+              </Route>
+              <Route path="/profile/wish-list">
+                <FutureImplementation />
+              </Route>
+              <Route path="/profile/gift-cards">
+                <FutureImplementation />
               </Route>
             </Switch>
           </Grid>

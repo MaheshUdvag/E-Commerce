@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import path from "path";
 import mongoose from "mongoose";
 import ProductRoutes from "./routes/searchRoutes/products.js";
 import CategoryRoutes from "./routes/searchRoutes/categories.js";
@@ -33,6 +34,14 @@ app.use("/api/categories", CategoryRoutes);
 app.use("/api/catalog", CatalogRoutes);
 app.use("/api/users", UserRoutes);
 app.use("/api/orders", OrderRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("../frontend/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve("../frontend", "build", "index.html"));
+  });
+}
+
 app.use(requestNotFound);
 app.use(invalidRequest);
 

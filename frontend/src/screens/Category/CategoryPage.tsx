@@ -41,7 +41,7 @@ const CategoryPage = (props: any) => {
       ) : (
         <PageSkeleton />
       )}
-      {!category && <Error />}
+      {!category && !loading && <Error />}
     </>
   );
 };

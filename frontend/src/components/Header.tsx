@@ -34,9 +34,10 @@ const useStyles = makeStyles((theme) => ({
   },
   topCategories: {
     [theme.breakpoints.up("md")]: {
-      marginLeft: 120,
+      justifyContent: "center",
     },
     display: "flex",
+    width: "100%",
   },
   toolBar: {
     backgroundColor: "white",
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 10,
   },
   category: {
-    padding: 5,
+    padding: "10px 25px",
     margin: 5,
     display: "inline",
   },

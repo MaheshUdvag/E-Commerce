@@ -104,13 +104,15 @@ export const getOrderByStatus = asyncHandler(async (req, res) => {
   const order = await Order.find({
     user,
     status,
-  }).populate({
-    path: "orderItems",
-    populate: {
-      path: "product",
-      model: "product",
-    },
-  });
+  })
+    .populate({
+      path: "orderItems",
+      populate: {
+        path: "product",
+        model: "product",
+      },
+    })
+    .sort({ placedTime: -1 });
 
   if (order) {
     res.send(order);

@@ -20,7 +20,8 @@ export const getProductsByCount = asyncHandler(async (req, res) => {
           model: "language",
         },
       })
-      .limit(count);
+      .limit(count)
+      .sort({ lastUpdate: -1 });
     await redis.set(cacheKey, JSON.stringify(products));
   }
 
