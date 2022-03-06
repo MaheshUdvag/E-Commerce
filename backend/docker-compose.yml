@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  redis:
+    image: redis
+    container_name: cache
+    expose:
+      - 6379
+  mcommerce:
+    build: .
+    container_name: mcommerce
+    restart: unless-stopped
+    ports:
+      - 80:5000
+    links:
+      - redis

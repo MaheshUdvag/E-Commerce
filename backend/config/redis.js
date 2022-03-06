@@ -2,7 +2,11 @@ import Redis from "redis";
 
 export class RedisClient {
   constructor() {
-    this.redisClient = Redis.createClient(6379);
+    const port = process.env.REDIS_PORT || 6379;
+    console.log(process.env.REDIS_URL);
+    this.redisClient = Redis.createClient({
+      url: process.env.REDIS_URL || "redis://cache",
+    });
     this.defaultExpiration = 3600;
   }
 
