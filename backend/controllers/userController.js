@@ -25,13 +25,17 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const register = asyncHandler(async (req, res) => {
-  const { name, password, email, address, storeName } = req.body;
+  const { name, password, email, address, storeName, userType } = req.body;
 
   const userExist = await UserSchema.findOne({ email });
 
   if (userExist) {
     res.status(400);
     throw new Error("User with the provided login Id exists");
+  }
+
+  if (!userType) {
+    userType = "R";
   }
 
   const store = await StoreSchema.findOne({ storeName });
@@ -42,6 +46,7 @@ export const register = asyncHandler(async (req, res) => {
     loginId: email,
     name,
     password: loginPassword,
+    userType,
     store,
     email,
   };

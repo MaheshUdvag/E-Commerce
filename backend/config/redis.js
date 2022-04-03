@@ -3,15 +3,20 @@ import Redis from "redis";
 export class RedisClient {
   constructor() {
     const port = process.env.REDIS_PORT || 6379;
-    console.log(process.env.REDIS_URL);
-    this.redisClient = Redis.createClient({
-      url: process.env.REDIS_URL || "redis://cache",
-    });
+    this.redisClient = process.env.REDIS_URL
+      ? Redis.createClient({
+          url: process.env.REDIS_URL || "redis://cache",
+        })
+      : Redis.createClient(6379);
     this.defaultExpiration = 3600;
   }
 
   connnect() {
     this.redisClient.connect();
+  }
+
+  clearCache() {
+    this.redisClient.flushAll("ASYNC", () => console.log("success"));
   }
 
   async get(key) {

@@ -31,3 +31,38 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     throw new Error("Not authorized");
   }
 });
+
+export const adminAuth = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+
+    let decode;
+    try {
+      decode = await jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      throw new Error("Invalid Token");
+    }
+
+    req.user = await UserSchema.findById(decode.id).select("-password");
+
+    if (req.user === null) {
+      res.status(401);
+      throw new Error("Invalid Token");
+    }
+
+    if (req.user.userType !== "S") {
+      res.status(401);
+      throw new Error("User not authorized to perform the request");
+    }
+
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
+});
