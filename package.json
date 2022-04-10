@@ -9,7 +9,7 @@
     "start:local": "nodemon ./backend/server.js",
     "start": "node ./backend/server.js",
     "build-client": "cd frontend && npm run build",
-    "install-client": "cd frontend && npm install",
+    "install-client": "cd frontend && npm install && npm install --dev--save",
     "heroku-postbuild": "npm run install-client && npm run build-client"
   },
   "repository": {
