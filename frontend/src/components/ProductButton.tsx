@@ -4,7 +4,6 @@ import BookmarkIcon from "@material-ui/icons/Bookmark";
 import CartIcon from "@material-ui/icons/ShoppingCart";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDispatch } from "react-redux";
-import { createOrderAction } from "../actions/orderActions";
 import { IProduct } from "./Interface/IProduct";
 import { IOrderItems } from "./Interface/IOrder";
 import useActiveOrder from "../hooks/useActiveOrder";
@@ -12,7 +11,7 @@ import { guestUser } from "../actions/userActions";
 import useUserLogin from "../hooks/useUserLogin";
 import { Alert, Color } from "@material-ui/lab";
 import { ACTIVE_ORDER_SUCCESS } from "../ActionTypes/order";
-import { addUpdateItem, removeItem } from "../apis/orderApis";
+import { addUpdateItem, createOrder, removeItem } from "../apis/orderApis";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -65,7 +64,13 @@ const ProductButton = ({ product }: { product: IProduct }) => {
       if (!user) {
         await dispatch(guestUser());
       }
-      await dispatch(createOrderAction(product._id, 1));
+      const { data, status } = await createOrder(product._id, 1, user.token);
+      if (status === 200 || status === 201) {
+        showMessage("Updated cart successfully", "success");
+        dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+      } else {
+        showMessage("Error occured while updating cart", "error");
+      }
     }
   };
 
