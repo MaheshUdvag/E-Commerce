@@ -25,7 +25,8 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const register = asyncHandler(async (req, res) => {
-  const { name, password, email, address, storeName, userType } = req.body;
+  const { name, password, email, address, storeName } = req.body;
+  let { userType } = req.body;
 
   const userExist = await UserSchema.findOne({ email });
 

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { listProductsByCategory } from "../../actions/productActions";
 import Error from "../../components/Error";
-import PageSkeleton from "../../components/PageSkeleton";
+import CategorySkeleton from "../../components/Skeletons/CategorySkeleton";
 import ProductList from "../../components/ProductList";
 
 const CategoryPage = (props: any) => {
@@ -39,7 +39,7 @@ const CategoryPage = (props: any) => {
           handleSortChange={handleSortChange}
         />
       ) : (
-        <PageSkeleton />
+        <CategorySkeleton />
       )}
       {!category && !loading && <Error />}
     </>

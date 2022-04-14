@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { findProductsBySearchTerm } from "../../actions/categoryActions";
 import ProductList from "../../components/ProductList";
+import CategorySkeleton from "../../components/Skeletons/CategorySkeleton";
 
 const SearchPage: React.FC<any> = ({ location }) => {
   const searchParams = new URLSearchParams(location.search);
@@ -26,14 +27,18 @@ const SearchPage: React.FC<any> = ({ location }) => {
 
   return (
     <>
-      <ProductList
-        products={products}
-        title={`Search results for ${searchTerm}`}
-        loading={loading}
-        page="search"
-        sortOptions={sortOptions}
-        handleSortChange={handleSortChange}
-      />
+      {!loading && products && Object.keys(products).length >= 0 ? (
+        <ProductList
+          products={products}
+          title={`Search results for ${searchTerm}`}
+          loading={loading}
+          page="search"
+          sortOptions={sortOptions}
+          handleSortChange={handleSortChange}
+        />
+      ) : (
+        <CategorySkeleton page="search" />
+      )}
     </>
   );
 };

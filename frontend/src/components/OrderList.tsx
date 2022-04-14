@@ -2,10 +2,12 @@ import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
 import { IOrder } from "./Interface/IOrder";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import { Skeleton } from "@material-ui/lab";
 
 interface IOrderList {
   orders: IOrder[];
   selectOrder: (order: IOrder) => void;
+  loading: boolean;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -30,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const OrderList: React.FC<IOrderList> = ({ orders, selectOrder }) => {
+const OrderList: React.FC<IOrderList> = ({ orders, selectOrder, loading }) => {
   const classes = useStyles();
 
-  return orders && orders.length > 0 ? (
+  return (
     <Container className={classes.orders}>
       <Grid container className={classes.order}>
         <Typography variant="h4">Orders</Typography>
@@ -50,7 +52,7 @@ const OrderList: React.FC<IOrderList> = ({ orders, selectOrder }) => {
         </Grid>
         <Grid item lg={3} md={2} sm={2} xs={1}></Grid>
       </Grid>
-      {orders.map((order) => (
+      {orders?.map((order) => (
         <Grid container key={order._id} className={classes.order}>
           <Grid item lg={3} md={4} sm={4} xs={5}>
             <Typography variant="body2">{order.orderId}</Typography>
@@ -72,9 +74,31 @@ const OrderList: React.FC<IOrderList> = ({ orders, selectOrder }) => {
           </Grid>
         </Grid>
       ))}
+      {!orders && loading ? (
+        [1, 2, 3, 4].map((index) => (
+          <Grid container key={index} className={classes.order}>
+            <Grid item lg={3} md={4} sm={4} xs={5}>
+              <Skeleton variant="rect" height={15} width={90} />
+            </Grid>
+            <Grid item lg={3} md={3} sm={3} xs={3}>
+              <Skeleton variant="rect" height={15} width={90} />
+            </Grid>
+            <Grid item lg={3} md={3} sm={3} xs={3}>
+              <Skeleton variant="rect" height={15} width={90} />
+            </Grid>
+            <Grid item lg={3} md={2} sm={2} xs={1}>
+              <Skeleton variant="rect" height={15} width={10} />
+            </Grid>
+          </Grid>
+        ))
+      ) : (
+        <Grid container className={classes.order}>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Typography variant="h6">No Orders Available.</Typography>
+          </Grid>
+        </Grid>
+      )}
     </Container>
-  ) : (
-    <div>No Orders</div>
   );
 };
 

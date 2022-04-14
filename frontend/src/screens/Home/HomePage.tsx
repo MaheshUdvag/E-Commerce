@@ -6,6 +6,7 @@ import { listProducts } from "../../actions/productActions";
 import { HOME_PAGE_CONSTANTS } from "./HomePageConstants";
 import { useTranslation } from "react-i18next";
 import CategoryList from "../../components/CategoryList";
+import HomePageSkeleton from "../../components/Skeletons/HomePageSkeleton";
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -28,16 +29,22 @@ const HomePage = () => {
 
   return (
     <>
-      <MyCarousel />
-      {categories && !categoryLoad && (
-        <CategoryList categories={categories} label="Top Categories" />
+      {!categoryLoad && !loading ? (
+        <>
+          <MyCarousel />
+          {categories && !categoryLoad && (
+            <CategoryList categories={categories} label="Top Categories" />
+          )}
+          <ProductList
+            products={products}
+            loading={loading}
+            title={t(LATEST_PRODUCTS)}
+            page={t(PAGE)}
+          />
+        </>
+      ) : (
+        <HomePageSkeleton type="default" />
       )}
-      <ProductList
-        products={products}
-        loading={loading}
-        title={t(LATEST_PRODUCTS)}
-        page={t(PAGE)}
-      />
     </>
   );
 };

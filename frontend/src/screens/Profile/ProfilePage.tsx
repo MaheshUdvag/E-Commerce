@@ -60,7 +60,7 @@ const ProfilePage = (props: any) => {
   const { user: profile } = useSelector((state: any) => {
     return state.userProfile;
   });
-  const { orders } = useSelector((state: any) => {
+  const { orders, loading } = useSelector((state: any) => {
     return state.orders;
   });
   const pathName = props.history.location.pathname;
@@ -133,6 +133,7 @@ const ProfilePage = (props: any) => {
               <Route path="/profile/orders">
                 <OrderList
                   orders={orders}
+                  loading={loading}
                   selectOrder={(order: IOrder) => {
                     setOrderDetail(order);
                     history.push(`/profile/order/${order.orderId}`);

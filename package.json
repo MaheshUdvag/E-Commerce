@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:local": "nodemon ./backend/server.js",
+    "start:local": "concurrently \"nodemon ./backend/server.js\" \"npm run start:client\"",
     "start": "node ./backend/server.js",
     "build-client": "cd frontend && npm run build",
+    "start:client": "cd frontend && npm start",
     "install-client": "cd frontend && npm install && npm install --dev--save",
     "heroku-postbuild": "npm run install-client && npm run build-client"
   },
@@ -25,6 +26,7 @@
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.2",
     "bcrypt": "^5.0.1",
+    "concurrently": "^7.1.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",

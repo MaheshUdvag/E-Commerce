@@ -22,20 +22,25 @@ const useStyles = makeStyles((theme) => ({
     padding: 2,
     borderRadius: 5,
   },
-  button: { margin: 3 },
+  button: {
+    margin: 3,
+  },
   paper: {
+    height: "26vh",
     [theme.breakpoints.up("md")]: {
-      height: "19vh",
+      padding: 15,
+      height: "22vh",
     },
-    padding: 15,
+    padding: 10,
   },
   paperSelected: {
-    [theme.breakpoints.up("md")]: {
-      height: "19vh",
-    },
+    height: "26vh",
     border: "3px solid #232f3e",
-    width: "12vw",
-    padding: 15,
+    [theme.breakpoints.up("md")]: {
+      padding: 15,
+      height: "22vh",
+    },
+    padding: 10,
   },
 }));
 

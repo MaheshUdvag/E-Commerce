@@ -12,6 +12,7 @@ import { OrderInfo } from "../../components/OrderInfo";
 import OrderSummary from "../../components/OrderSummary";
 import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 import { useHistory } from "react-router";
+import OrderConfirmationSkeleton from "../../components/Skeletons/OrderConfirmationSkeleton";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -82,7 +83,9 @@ const OrderSuccessPage: React.FC<any> = (props) => {
         </Grid>
       </Grid>
     </Container>
-  ) : null;
+  ) : (
+    <OrderConfirmationSkeleton />
+  );
 };
 
 export default OrderSuccessPage;

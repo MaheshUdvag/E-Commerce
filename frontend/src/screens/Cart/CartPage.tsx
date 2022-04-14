@@ -12,9 +12,11 @@ const CartPage = () => {
   const { order, error } = useActiveOrder();
 
   useEffect(() => {
-    dispatch(getActiveOrder());
+    if (!order) {
+      dispatch(getActiveOrder());
+    }
     window.scrollTo(0, 0);
-  }, [dispatch]);
+  }, [dispatch, order]);
 
   return (
     <Container>

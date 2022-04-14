@@ -1,3 +1,4 @@
+import { Grid } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
@@ -18,28 +19,32 @@ const useStyles = makeStyles(() => ({
     justifyContent: "center",
     alignItems: "center",
   },
-  productCard: { margin: "30px" },
+  productCard: { margin: "5%", width: 250, height: 300 },
 }));
 
-const PageSkeleton = () => {
+const HomeHomePageSkeleton = ({ type }) => {
   const classes = useStyles();
 
   return (
     <div>
+      {type === "fallback" && (
+        <Skeleton className={classes.header} variant="rect" />
+      )}
       <Skeleton className={classes.carouselImage} variant="rect" />
-      <div className={classes.productCards}>
+
+      <Grid container alignItems="center" spacing={3}>
         {[1, 2, 3, 4].map((index) => (
-          <Skeleton
-            className={classes.productCard}
-            key={index}
-            variant="rect"
-            width={250}
-            height={350}
-          />
+          <Grid key={index} item xs={12} sm={6} lg={3} md={4}>
+            <Skeleton
+              className={classes.productCard}
+              key={index}
+              variant="rect"
+            />
+          </Grid>
         ))}
-      </div>
+      </Grid>
     </div>
   );
 };
 
-export default PageSkeleton;
+export default HomeHomePageSkeleton;
