@@ -140,6 +140,12 @@ const Header = () => {
             {isMobile ? (
               <div>
                 <IconButton
+                  onClick={() => history.push("/cart")}
+                  color="inherit"
+                >
+                  <CartIcon />
+                </IconButton>
+                <IconButton
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
                   aria-haspopup="true"
@@ -211,6 +217,18 @@ const Header = () => {
                         }}
                       >
                         CART
+                      </Button>
+                      <Button
+                        color="secondary"
+                        fullWidth={true}
+                        style={{ padding: "10px", minWidth: 170 }}
+                        onClick={() => {
+                          setMenuAnchorEl(null);
+                          setOpenUserMenu(false);
+                          history.push("/login");
+                        }}
+                      >
+                        LOGIN / SIGN UP
                       </Button>
                     </>
                   )}

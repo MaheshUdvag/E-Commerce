@@ -10,7 +10,7 @@ const useStyles = makeStyles(() => ({
     height: "10vh",
   },
   carouselImage: {
-    width: "95%",
+    width: "90%",
     height: "30vh",
     margin: "20px",
   },

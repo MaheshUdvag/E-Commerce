@@ -34,7 +34,7 @@ const SearchBar: React.FC<any> = ({ fullWidth = false }) => {
   const [value, setValue] = useState<string>("");
   const dispatch = useDispatch();
   const history = useHistory();
-  const { products } = useSelector((state: any) => {
+  const { products, loading } = useSelector((state: any) => {
     return state.searchSuggestions;
   });
 
@@ -68,7 +68,19 @@ const SearchBar: React.FC<any> = ({ fullWidth = false }) => {
         fullWidth={fullWidth}
         autoComplete="true"
         InputProps={{
-          endAdornment: <SearchIcon />,
+          endAdornment: (
+            <SearchIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                if (value !== "") {
+                  setValue("");
+                  setAnchorEl(null);
+                  setOpenSearchResult(false);
+                  history.push(`/search-results?term=${value}`);
+                }
+              }}
+            />
+          ),
         }}
         className={classes.searchInput}
         onKeyPress={(event: any) => {
@@ -80,9 +92,13 @@ const SearchBar: React.FC<any> = ({ fullWidth = false }) => {
           }
         }}
         onChange={handleChange}
+        onBlur={() => {
+          setAnchorEl(null);
+          setOpenSearchResult(false);
+        }}
       />
       <Popper
-        open={openSearchResult}
+        open={openSearchResult && anchorEl !== null}
         id="search-results"
         anchorEl={anchorEl}
         placement="bottom"
@@ -94,27 +110,33 @@ const SearchBar: React.FC<any> = ({ fullWidth = false }) => {
           zIndex: 10000,
           width: "65%",
         }}
+        onBlur={() => {
+          setAnchorEl(null);
+          setOpenSearchResult(false);
+        }}
       >
-        {products ? (
-          products.map((product: IProduct) => (
-            <Button
-              color="secondary"
-              fullWidth={true}
-              key={product._id}
-              style={{ zIndex: 999 }}
-              onClick={() => {
-                setValue("");
-                setAnchorEl(null);
-                setOpenSearchResult(false);
-                history.push(`/product/${product.path}`);
-              }}
-            >
-              <Typography variant="body2">{product.name}</Typography>
-            </Button>
-          ))
-        ) : (
-          <></>
-        )}
+        <>
+          {products && !loading ? (
+            products.map((product: IProduct) => (
+              <Button
+                color="secondary"
+                fullWidth={true}
+                key={product._id}
+                style={{ zIndex: 999 }}
+                onClick={() => {
+                  setValue("");
+                  setAnchorEl(null);
+                  setOpenSearchResult(false);
+                  history.push(`/product/${product.path}`);
+                }}
+              >
+                <Typography variant="body2">{product.name}</Typography>
+              </Button>
+            ))
+          ) : (
+            <></>
+          )}
+        </>
       </Popper>
     </>
   );

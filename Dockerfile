@@ -10,7 +10,7 @@ COPY . .
 
 RUN npm run install-client
 
-RUN npm run build
+RUN npm run build-client
 
 EXPOSE 5000
 
