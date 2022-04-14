@@ -1,4 +1,4 @@
-E-Commerce Application
+**E-Commerce Application**
 
 - A MERN e-commerce application developed with React, Redux for the User Interface and Node for Back End
 - Developed Redis caching to minimise calls to the DB
