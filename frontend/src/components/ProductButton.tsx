@@ -7,11 +7,13 @@ import { useDispatch } from "react-redux";
 import { IProduct } from "./Interface/IProduct";
 import { IOrderItems } from "./Interface/IOrder";
 import useActiveOrder from "../hooks/useActiveOrder";
-import { guestUser } from "../actions/userActions";
+import { guestRegister } from "../apis/userApis";
 import useUserLogin from "../hooks/useUserLogin";
 import { Alert, Color } from "@material-ui/lab";
 import { ACTIVE_ORDER_SUCCESS } from "../ActionTypes/order";
 import { addUpdateItem, createOrder, removeItem } from "../apis/orderApis";
+import { USER_LOGIN_SUCCESS, USER_REGISTER_SUCCESS } from "../ActionTypes/user";
+import { getActiveOrder } from "../actions/orderActions";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -32,7 +34,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   const { user } = useUserLogin();
   const [inCart, setInCart] = useState(false);
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<Color | undefined>("success");
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -44,8 +46,8 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   };
 
   const showMessage = (message: any, type?: any) => {
-    if (error) {
-      setMessage(error);
+    if (error?.message) {
+      setMessage(error.message);
     } else {
       setMessage(message);
     }
@@ -61,13 +63,18 @@ const ProductButton = ({ product }: { product: IProduct }) => {
       }
       updateQuantity(order._id, product._id, quantity, user.token);
     } else {
-      if (!user) {
-        await dispatch(guestUser());
+      let token = user?.token;
+      if (!token) {
+        const { data } = await guestRegister();
+        token = data.token;
+        dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+        dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
       }
-      const { data, status } = await createOrder(product._id, 1, user.token);
+
+      const { data, status } = await createOrder(product._id, 1, token);
       if (status === 200 || status === 201) {
-        showMessage("Updated cart successfully", "success");
         dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
+        showMessage("Updated cart successfully");
       } else {
         showMessage("Error occured while updating cart", "error");
       }
@@ -81,18 +88,18 @@ const ProductButton = ({ product }: { product: IProduct }) => {
     token: any
   ) => {
     let response;
-    let emptyCart = false;
+    let removeItemFromCart = false;
     if (quantity) {
       response = await addUpdateItem(order, product, quantity, token);
     } else {
-      emptyCart = true;
+      removeItemFromCart = true;
       response = await removeItem(order, product, token);
     }
 
     if (response.status === 200 || response.status === 201) {
       showMessage("Updated cart successfully", "success");
-      if (emptyCart) {
-        dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: {} });
+      if (removeItemFromCart) {
+        dispatch(getActiveOrder());
       } else {
         dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: response.data });
       }

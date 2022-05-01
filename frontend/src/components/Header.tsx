@@ -218,18 +218,20 @@ const Header = () => {
                       >
                         CART
                       </Button>
-                      <Button
-                        color="secondary"
-                        fullWidth={true}
-                        style={{ padding: "10px", minWidth: 170 }}
-                        onClick={() => {
-                          setMenuAnchorEl(null);
-                          setOpenUserMenu(false);
-                          history.push("/login");
-                        }}
-                      >
-                        LOGIN / SIGN UP
-                      </Button>
+                      {!authenticated && (
+                        <Button
+                          color="secondary"
+                          fullWidth={true}
+                          style={{ padding: "10px", minWidth: 170 }}
+                          onClick={() => {
+                            setMenuAnchorEl(null);
+                            setOpenUserMenu(false);
+                            history.push("/login");
+                          }}
+                        >
+                          LOGIN / SIGN UP
+                        </Button>
+                      )}
                     </>
                   )}
                   {authenticated === true && (

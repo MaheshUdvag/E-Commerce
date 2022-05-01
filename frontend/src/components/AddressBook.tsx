@@ -40,7 +40,7 @@ const AddressBook: React.FC<Props> = ({
   }, [address]);
 
   useEffect(() => {
-    if (address) {
+    if (address !== undefined && address.length > 0) {
       sortAddressByPrimary();
     }
   }, [address, sortAddressByPrimary]);

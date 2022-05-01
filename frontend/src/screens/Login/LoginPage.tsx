@@ -68,7 +68,9 @@ const LoginPage = (props: any) => {
     password: string;
   }) => {
     dispatch(loginUser(email, password));
-    history.goBack();
+    if (authenticated) {
+      history.goBack();
+    }
   };
 
   const { error, authenticated } = useUserLogin();
