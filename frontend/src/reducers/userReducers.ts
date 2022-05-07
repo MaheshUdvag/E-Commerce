@@ -25,6 +25,7 @@ export const userLoginReducer = (state = {}, action: any) => {
       if (action.payload) {
         authenticated = action.payload.authenticated;
       }
+      localStorage.setItem("loggedInUser", JSON.stringify(action.payload));
       return { loading: false, user: action.payload, authenticated };
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload, authenticated: false };
@@ -40,6 +41,7 @@ export const userRegisterReducer = (state = {}, action: any) => {
     case USER_REGISTER_REQUEST:
       return { loading: true };
     case USER_REGISTER_SUCCESS:
+      localStorage.setItem("loggedInUser", JSON.stringify(action.payload));
       return { loading: false, user: action.payload };
     case USER_REGISTER_FAIL:
       return { error: action.payload };

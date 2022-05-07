@@ -9,7 +9,7 @@ import { IOrderItems } from "./Interface/IOrder";
 import useActiveOrder from "../hooks/useActiveOrder";
 import { guestRegister } from "../apis/userApis";
 import useUserLogin from "../hooks/useUserLogin";
-import { Alert, Color } from "@material-ui/lab";
+import { Alert, Color, Skeleton } from "@material-ui/lab";
 import { ACTIVE_ORDER_SUCCESS } from "../ActionTypes/order";
 import { addUpdateItem, createOrder, removeItem } from "../apis/orderApis";
 import { USER_LOGIN_SUCCESS, USER_REGISTER_SUCCESS } from "../ActionTypes/user";
@@ -36,6 +36,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState<Color | undefined>("success");
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
     if (reason === "clickaway") {
@@ -56,6 +57,8 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   };
 
   const addToCart = async () => {
+    setLoading(true);
+
     if (order && Object.keys(order).length > 0) {
       let quantity = 1;
       if (orderItem) {
@@ -64,15 +67,21 @@ const ProductButton = ({ product }: { product: IProduct }) => {
       updateQuantity(order._id, product._id, quantity, user.token);
     } else {
       let token = user?.token;
+      let guestLoginData;
       if (!token) {
         const { data } = await guestRegister();
         token = data.token;
-        dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
-        dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+        guestLoginData = data;
       }
 
       const { data, status } = await createOrder(product._id, 1, token);
       if (status === 200 || status === 201) {
+        if (guestLoginData) {
+          dispatch({ type: USER_REGISTER_SUCCESS, payload: guestLoginData });
+          dispatch({ type: USER_LOGIN_SUCCESS, payload: guestLoginData });
+        }
+
+        setLoading(false);
         dispatch({ type: ACTIVE_ORDER_SUCCESS, payload: data });
         showMessage("Updated cart successfully");
       } else {
@@ -97,6 +106,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
     }
 
     if (response.status === 200 || response.status === 201) {
+      setLoading(false);
       showMessage("Updated cart successfully", "success");
       if (removeItemFromCart) {
         dispatch(getActiveOrder());
@@ -109,6 +119,7 @@ const ProductButton = ({ product }: { product: IProduct }) => {
   };
 
   const removeFromCart = async () => {
+    setLoading(true);
     if (orderItem) {
       let quantity = orderItem.quantity;
       quantity -= 1;
@@ -137,44 +148,48 @@ const ProductButton = ({ product }: { product: IProduct }) => {
 
   return (
     <div>
-      {inCart ? (
-        <Grid container>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <Button
-              color="primary"
-              variant="contained"
-              className={classes.button}
-              onClick={removeFromCart}
-            >
-              -
-            </Button>
+      {!loading ? (
+        inCart ? (
+          <Grid container>
+            <Grid item lg={4} md={4} sm={4} xs={4}>
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.button}
+                onClick={removeFromCart}
+              >
+                -
+              </Button>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={4}>
+              <Typography className={classes.quantity}>
+                {orderItem?.quantity}
+              </Typography>
+            </Grid>
+            <Grid item lg={4} md={4} sm={4} xs={4}>
+              <Button
+                color="primary"
+                variant="contained"
+                className={classes.button}
+                onClick={addToCart}
+              >
+                +
+              </Button>
+            </Grid>
           </Grid>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <Typography className={classes.quantity}>
-              {orderItem?.quantity}
-            </Typography>
-          </Grid>
-          <Grid item lg={4} md={4} sm={4} xs={4}>
-            <Button
-              color="primary"
-              variant="contained"
-              className={classes.button}
-              onClick={addToCart}
-            >
-              +
-            </Button>
-          </Grid>
-        </Grid>
+        ) : (
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.button}
+            startIcon={<CartIcon />}
+            onClick={addToCart}
+          >
+            Add to Cart
+          </Button>
+        )
       ) : (
-        <Button
-          color="primary"
-          variant="contained"
-          className={classes.button}
-          startIcon={<CartIcon />}
-          onClick={addToCart}
-        >
-          Add to Cart
-        </Button>
+        <Skeleton variant="rect" height={50} className={classes.button} />
       )}
 
       <Button
