@@ -10,7 +10,7 @@
     "start": "node ./backend/server.js",
     "build-client": "cd frontend && npm run build",
     "start:client": "cd frontend && npm start",
-    "install-client": "cd frontend && npm install && npm install --dev--save",
+    "install-client": "cd frontend && npm install",
     "heroku-postbuild": "npm run install-client && npm run build-client"
   },
   "repository": {
