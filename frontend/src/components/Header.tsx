@@ -16,13 +16,13 @@ import {
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import { useTheme } from "@material-ui/core/styles";
-import CartIcon from "@material-ui/icons/ShoppingCart";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import { useHistory } from "react-router-dom";
 import { ICategory } from "./Interface/ICategory";
 import useUserLogin from "../hooks/useUserLogin";
 import SearchBar from "./SearchBar";
+import CustomCartIcon from "./CustomCartIcon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,6 +106,10 @@ const Header = () => {
     return state.categoryListReducer;
   });
 
+  const { order } = useSelector((state: any) => {
+    return state.activeOrder;
+  });
+
   const { user, authenticated } = useUserLogin();
 
   const { categories } = categoryList;
@@ -143,7 +147,11 @@ const Header = () => {
                   onClick={() => history.push("/cart")}
                   color="inherit"
                 >
-                  <CartIcon />
+                  <CustomCartIcon
+                    count={
+                      order?.orderItems?.length ? order.orderItems.length : 0
+                    }
+                  />
                 </IconButton>
                 <IconButton
                   aria-label="account of current user"
@@ -158,7 +166,13 @@ const Header = () => {
             ) : (
               <div>
                 <Button
-                  startIcon={<CartIcon />}
+                  startIcon={
+                    <CustomCartIcon
+                      count={
+                        order?.orderItems?.length ? order.orderItems.length : 0
+                      }
+                    />
+                  }
                   color="secondary"
                   onClick={() => history.push("/cart")}
                 >
