@@ -11,7 +11,7 @@
     "build-client": "cd frontend && npm run build",
     "start:client": "cd frontend && npm start",
     "install-client": "cd frontend && npm install",
-    "build-local": "npm run install-client && npm run build-client"
+    "build": "npm install && npm run install-client && npm run build-client"
   },
   "repository": {
     "type": "git",
@@ -26,13 +26,11 @@
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.2",
     "bcrypt": "^5.0.1",
-    "concurrently": "^7.1.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.13.2",
-    "redis": "^4.0.0"
+    "mongoose": "^5.13.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
