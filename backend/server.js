@@ -38,9 +38,9 @@ app.use("/api/orders", OrderRoutes);
 app.use("/api/admin", AdminRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../app/frontend/build"));
+  app.use(express.static(path.resolve("frontend/build")));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve("../app/frontend", "build", "index.html"));
+    res.sendFile(path.resolve("frontend/build/index.html"));
   });
 }
 
