@@ -305,6 +305,7 @@ const Header = () => {
                             backgroundColor: "#232f3e",
                             maxWidth: 170,
                             borderRadius: 5,
+                            zIndex: 10000,
                           }}
                         >
                           <ClickAwayListener
