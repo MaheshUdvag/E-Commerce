@@ -9,7 +9,10 @@ export class RedisClient {
         password: process.env.REDIS_PASSWORD,
       });
     } else {
-      this.redisClient = Redis.createClient();
+      this.redisClient = Redis.createClient({
+        url: process.env.REDIS_URL,
+        password: process.env.REDIS_PASSWORD,
+      });
     }
   }
 
